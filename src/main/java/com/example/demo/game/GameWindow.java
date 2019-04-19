@@ -111,6 +111,7 @@ public class GameWindow extends Window {
 
     @Override
     protected void onDisplayUpdate() {
+
         tank.draw();
         tank2.draw();
         for (Bullet bullet : blist) {//bullet每一个子弹类对象名
