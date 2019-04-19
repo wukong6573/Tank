@@ -17,7 +17,8 @@ public class GameWindow extends Window {
     private CopyOnWriteArrayList<Bullet> blist = new CopyOnWriteArrayList<>();//子弹类集合blist
 
     private CopyOnWriteArrayList<Pictrue> list = new CopyOnWriteArrayList<>();//图片集合list
-    private CopyOnWriteArrayList<Blast> blasters = new CopyOnWriteArrayList<>();//爆炸物集合list
+    private CopyOnWriteArrayList<Pictrue> list2 = new CopyOnWriteArrayList<>();//图片集合list
+    private CopyOnWriteArrayList<TankFactory> tanks = new CopyOnWriteArrayList<>();//爆炸物集合list
 
     public GameWindow(String title, int width, int height, int fps) {
         //子类构造方法不写也是写,默认调用父类无参构造方法,现在父类没有无参,手动调用父类有参,你写按照你写的走
@@ -30,7 +31,7 @@ public class GameWindow extends Window {
 
         tank = new Tank(64 * 8, 0);//坦克对象名tank
 
-        tank2=new Tank2(64*10,0);  //第二辆坦克
+        tank2 = new Tank2(64 * 10, 0);  //第二辆坦克
 
 
         for (int i = 0; i < 6; i++) {//0-17
@@ -43,6 +44,8 @@ public class GameWindow extends Window {
             list.add(steel);
             list.add(wall);
         }
+        tanks.add(tank);
+        tanks.add(tank2);
     }
 
     @Override
@@ -80,7 +83,7 @@ public class GameWindow extends Window {
                 }
                 break;
 
-                //坦克2
+            //坦克2
             case Keyboard.KEY_W://进来这里面说明我按下↑箭头按键,希望坦克移动,对应一个向上方向移动,过坦克对象名点调用,move方法
                 tank2.move(Direction.UP);
                 break;
@@ -111,33 +114,63 @@ public class GameWindow extends Window {
 
     @Override
     protected void onDisplayUpdate() {
+        //第一个版本,内容包括:移动,碰撞,子弹销毁产生爆炸
+        version_1();
 
-        tank.draw();
-        tank2.draw();
+        if(list.size()<=list.size()-24){
+            list=list2;
+        }
+    }
+
+    private void version_1() {
+        //子弹碰撞坦克,也会发生爆炸
+        for (TankFactory tank : tanks) {
+            tank.draw();
+            for (Bullet bullet : blist) {
+                if (bullet.checkHit(tank)) {
+                    bullet.boom().draw();
+                    blist.remove(bullet);
+                }
+            }
+        }
+
+        //坦克碰到坦克,也要停下来
+        for (TankFactory tank1 : tanks) {
+            for (TankFactory tank2 : tanks) {
+                if (tank1.checkHit(tank2)) {
+                    break;
+                }
+            }
+        }
+
+        //子弹撞到边界,或者 子弹碰到 图片,也会爆炸
         for (Bullet bullet : blist) {//bullet每一个子弹类对象名
             if (bullet.isDestroyed()) {
                 bullet.boom().draw();
                 blist.remove(bullet);//超出范围,就从集合里面移除这个子弹对象,集合里面就没有这个子弹对象了,就不会把它绘制出来了
             }
             for (Pictrue p : list) {
-                if(bullet.checkHit(p)){
+                //子弹碰到图片,就让他 爆炸
+                if (bullet.checkHit(p)) {
                     bullet.boom().draw();
+                    //子弹碰到图片,图片也消失
                     blist.remove(bullet);
+                    list.remove(p);
                 }
             }
             bullet.draw();
         }
 
+        //图片把自己画出来
         for (Pictrue p : list) {//Pictrue p = 墙水草铁对象;多态
             p.draw();//父类引用执行子类对象,调用非静态方法,编译看左边父类,没有报错,真正的结果看指向的子类里面的draw方法,把不同子类图片绘制出来
         }
-        for (Pictrue p : list) {
-            if (p instanceof Steel) {
-                if(tank.checkHit((Steel)p)){
-                    //如果检测到碰撞，一定要跳出循环,不跟其他铁比较,为什么???
-                    break;
-                }
-                if(tank2.checkHit((Steel)p)){
+
+        //坦克碰到图片,就停下
+        for (TankFactory tankFactory : tanks) {
+            for (Pictrue p : list) {
+                if (tankFactory.checkHit(p)) {
+//                //如果检测到碰撞，一定要跳出循环,不跟其他铁比较,为什么???
                     break;
                 }
             }

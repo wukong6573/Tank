@@ -15,7 +15,7 @@ import java.io.IOException;
 @Data
 public class Tank2 extends TankFactory{
 
-    public Tank2(int x, int y) {//x = 0,y = 64;
+    public Tank2(int x, int y) {
         this.x=x;
         this.y=y;
         try {

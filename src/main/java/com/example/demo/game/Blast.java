@@ -16,7 +16,6 @@ public class Blast{
 
     public void draw(){
             try {
-                System.out.println("爆炸的时刻");
                 DrawUtils.draw(GetPath.PATH+"\\img\\blast_8.gif",this.x, this.y);
             } catch (IOException e) {
                 // TODO 自动生成的 catch 块
