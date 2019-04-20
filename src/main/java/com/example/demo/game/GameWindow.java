@@ -116,7 +116,6 @@ public class GameWindow extends Window {
     protected void onDisplayUpdate() {
         //第一个版本,内容包括:移动,碰撞,子弹销毁产生爆炸
         version_1();
-        //测试
 
         if(list.size()<=list.size()-24){
             list=list2;
