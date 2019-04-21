@@ -13,6 +13,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public class GameWindow extends Window {
     private Tank tank;//null
     private Tank2 tank2;//null
+    Result result;
     //集合不用ArrayList否则出现并发修改异常,改用能解决这个异常集合跟ArrayList差不多,名字叫CopyOnWriterArrayList
     private CopyOnWriteArrayList<Bullet> blist = new CopyOnWriteArrayList<>();//子弹类集合blist
 
@@ -44,8 +45,13 @@ public class GameWindow extends Window {
             list.add(steel);
             list.add(wall);
         }
+        list.add(new Home(Config.WIDTH*2/3,Config.HEIGHT));
+        list2.addAll(list);
         tanks.add(tank);
         tanks.add(tank2);
+
+        //结果对象
+         result=new Result();
     }
 
     @Override
@@ -112,13 +118,17 @@ public class GameWindow extends Window {
         }
     }
 
+    static int count=1;
+
     @Override
     protected void onDisplayUpdate() {
         //第一个版本,内容包括:移动,碰撞,子弹销毁产生爆炸
         version_1();
 
-        if(list.size()<=list.size()-24){
-            list=list2;
+        if(list.size()<=list2.size()-24){
+//            count++;
+//            list.addAll(list2);
+            result.draw();
         }
     }
 
@@ -152,10 +162,14 @@ public class GameWindow extends Window {
             for (Pictrue p : list) {
                 //子弹碰到图片,就让他 爆炸
                 if (bullet.checkHit(p)) {
+                    if(p instanceof Home){
+                        break;
+                    }
                     bullet.boom().draw();
                     //子弹碰到图片,图片也消失
                     blist.remove(bullet);
                     list.remove(p);
+
                 }
             }
             bullet.draw();

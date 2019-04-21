@@ -52,7 +52,7 @@ public class Bullet {
 			
 		case DOWN:
 			this.x = tank.x+(tank.width/2-this.width/2);
-			this.y = tank.y+(tank.height-this.height)/2;
+			this.y = tank.y+(tank.height)/2;
 			break;
 			
 		case LEFT:
