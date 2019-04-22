@@ -13,8 +13,10 @@ public class TankFactory{
      int width;//0
      int height;//0
      int speed = Config.SIZE / 2;//坦克的速度
-     Direction badDirection;
-     Direction badDirection2;
+      Direction badDirection;
+      Direction badDirection2;
+
+      Boolean shotWall=false;
 
     public void draw() {//画图要不断调用!!!
         try {
