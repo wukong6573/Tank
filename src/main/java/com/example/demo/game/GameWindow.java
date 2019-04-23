@@ -166,7 +166,11 @@ public class GameWindow extends Window {
                             bullet.boom().draw();
                             //子弹碰到图片,图片也消失
                             blist.remove(bullet);
-                            if (tank.shotWall) {
+                            if (p instanceof Home) {
+                                //子弹碰到家,直接GG,家的图片消失
+                                list.remove(p);
+                            } else if (tank.shotWall) {
+                                //其他图片需要强化武器才能被打掉
                                 list.remove(p);
                             }
                         }

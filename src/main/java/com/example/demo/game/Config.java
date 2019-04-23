@@ -1,6 +1,5 @@
 package com.example.demo.game;
 
-import javax.swing.*;
 
 /**
  * @author dell
