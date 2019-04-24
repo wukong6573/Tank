@@ -5,40 +5,54 @@ import com.example.demo.util.DrawUtils;
 
 import java.io.IOException;
 
-public class TankFactory{
-    Direction direction=Direction.UP;
-     int x;//0
-     int y;//0
-     int width;//0
-     int height;//0
-     int speed = Config.SIZE / 2;//坦克的速度
-      Direction badDirection;
-      Direction badDirection2;
+public class TankFactory {
+    Direction direction = Direction.UP;
+    int x;//0
+    int y;//0
+    int width;//0
+    int height;//0
+    int speed = Config.SIZE / 2;//坦克的速度
+    Direction badDirection;
+    Direction badDirection2;
 
-      Boolean shotWall=false;
+    Boolean shotWall = false;
 
     public void draw() {//画图要不断调用!!!
+        String up = "";
+        String down = "";
+        String left = "";
+        String right = "";
+        if (this instanceof EnemyTank) {
+            up = "/res/img/enemy_1_u.gif";
+            down="/res/img/enemy_1_d.gif";
+            left="/res/img/enemy_1_l.gif";
+            right="/res/img/enemy_1_r.gif";
+        } else {
+            up = "/res/img/tank_u.gif";
+            down="/res/img/tank_d.gif";
+            left="/res/img/tank_l.gif";
+            right="/res/img/tank_r.gif";
+        }
         try {
             switch (this.direction) {
                 case UP:
                     //想绘制画一张坦克图片在我游戏窗体上,很简单,调用我绘制工具类DrawUtils.draw(图片路径,图片坐标);
-                    DrawUtils.draw(Bullet.class.getResource("/res/img/tank_u.gif").getPath(), x, y);//0,64
-
+                    DrawUtils.draw(Bullet.class.getResource(up).getPath(), x, y);
                     break;
 
                 case DOWN:
                     //想绘制画一张坦克图片在我游戏窗体上,很简单,调用我绘制工具类DrawUtils.draw(图片路径,图片坐标);
-                    DrawUtils.draw(Bullet.class.getResource("/res/img/tank_d.gif").getPath(), x, y);//0,64
+                    DrawUtils.draw(Bullet.class.getResource(down).getPath(), x, y);//0,64
                     break;
 
                 case LEFT:
                     //想绘制画一张坦克图片在我游戏窗体上,很简单,调用我绘制工具类DrawUtils.draw(图片路径,图片坐标);
-                    DrawUtils.draw(Bullet.class.getResource("/res/img/tank_l.gif").getPath(), x, y);//0,64
+                    DrawUtils.draw(Bullet.class.getResource(left).getPath(), x, y);//0,64
                     break;
 
                 case RIGH:
                     //想绘制画一张坦克图片在我游戏窗体上,很简单,调用我绘制工具类DrawUtils.draw(图片路径,图片坐标);
-                    DrawUtils.draw(Bullet.class.getResource("/res/img/tank_r.gif").getPath(), x, y);//0,64
+                    DrawUtils.draw(Bullet.class.getResource(right).getPath(), x, y);//0,64
                     break;
                 default:
                     break;
@@ -167,8 +181,9 @@ public class TankFactory{
         }
         return flag;
     }
+
     public Boolean checkHit(TankFactory p) {
-        if(this.equals(p)){
+        if (this.equals(p)) {
             //不能和自己碰撞
             return false;
         }

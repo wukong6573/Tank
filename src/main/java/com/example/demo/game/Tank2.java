@@ -1,7 +1,6 @@
 package com.example.demo.game;
 
 import com.example.demo.util.DrawUtils;
-import lombok.Data;
 
 import java.io.IOException;
 
@@ -11,7 +10,6 @@ import java.io.IOException;
  * //面向对象,把你当成那个对象,你作为一个坦克对象应该具有自己把自己绘制画在游戏窗体上的功能,方法draw,写在坦克类里面
  * //以后,把坦克图片,坦克类,坦克对象都看成同一个东西理解
  */
-@Data
 public class Tank2 extends TankFactory{
 
     public Tank2(int x, int y) {

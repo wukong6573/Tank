@@ -18,6 +18,7 @@ public class JFrameDemo extends JFrame {
     private static boolean live = true;
     private static int playTime = 0;
     private static JFrameDemo jFrameDemo;
+    GameWindow gw;
 
 
     public static void main(String[] args) {
@@ -31,7 +32,7 @@ public class JFrameDemo extends JFrame {
         jb2 = new JButton("迷男");
 
         jl1=new JLabel("这个是啥");
-        jl1.setIcon(new ImageIcon(JFrameDemo.class.getResource("/res/img/blast_7.gif")));
+        jl1.setIcon(new ImageIcon(JFrameDemo.class.getResource("/res/img/blast_7.gif").getPath()));
 
 
         jp1 = new JPanel();
@@ -69,11 +70,17 @@ public class JFrameDemo extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if(live) {
-                    Config config=new Config();
-                    GameWindow gw = new GameWindow(Config.TITLE, Config.WIDTH, Config.HEIGHT, Config.FPS);
+                     gw = new GameWindow(Config.TITLE, Config.WIDTH, Config.HEIGHT, Config.FPS);
                     gw.start();
                     live=false;
                 }
+            }
+        });
+
+        jb2.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("迷男被点击了");
             }
         });
         //给同一个按钮设置两个不同的点击事件

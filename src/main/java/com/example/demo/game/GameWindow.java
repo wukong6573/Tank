@@ -3,6 +3,8 @@ package com.example.demo.game;
 import com.example.demo.util.Window;
 import org.lwjgl.input.Keyboard;
 
+import java.util.ArrayList;
+import java.util.Random;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 
@@ -13,6 +15,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public class GameWindow extends Window {
     private Tank tank;//null
     private Tank2 tank2;//null
+    private EnemyTank enemyTank;
     private Result result;
     private Home home;  //代表守卫的家
     private Weapon weapon;
@@ -35,7 +38,7 @@ public class GameWindow extends Window {
         tank = new Tank(64 * 8, 0);//坦克对象名tank
 
         tank2 = new Tank2(64 * 10, 0);  //第二辆坦克
-
+        enemyTank = new EnemyTank(0, 0);
         home = new Home(Config.WIDTH / 2, Config.HEIGHT - 64);
         weapon = new Weapon(Config.WIDTH / 2, Config.HEIGHT - 64 * 3);
 
@@ -52,8 +55,10 @@ public class GameWindow extends Window {
         list.add(home);
         list.add(weapon);
         list2.addAll(list);
+
         tanks.add(tank);
         tanks.add(tank2);
+        tanks.add(enemyTank);
 
         //结果对象
         result = new Result();
@@ -123,6 +128,9 @@ public class GameWindow extends Window {
         }
     }
 
+    Random random = new Random();
+    ArrayList<Integer> nums=new ArrayList();
+
 
     @Override
     protected void onDisplayUpdate() {
@@ -183,6 +191,10 @@ public class GameWindow extends Window {
         for (Bullet bullet : blist) {
             bullet.draw();
         }
+
+        int key = random.nextInt(10000);
+        enemyTank.getDirection(key);
+
 
         for (TankFactory tank1 : tanks) {
             for (TankFactory tank2 : tanks) {
