@@ -1,6 +1,5 @@
 package com.example.demo.game;
 
-import com.example.demo.config.GetPath;
 import com.example.demo.util.CollsionUtils;
 import com.example.demo.util.DrawUtils;
 
@@ -23,23 +22,23 @@ public class TankFactory{
             switch (this.direction) {
                 case UP:
                     //想绘制画一张坦克图片在我游戏窗体上,很简单,调用我绘制工具类DrawUtils.draw(图片路径,图片坐标);
-                    DrawUtils.draw(GetPath.PATH + "\\img\\tank_u.gif", x, y);//0,64
+                    DrawUtils.draw(Bullet.class.getResource("/res/img/tank_u.gif").getPath(), x, y);//0,64
 
                     break;
 
                 case DOWN:
                     //想绘制画一张坦克图片在我游戏窗体上,很简单,调用我绘制工具类DrawUtils.draw(图片路径,图片坐标);
-                    DrawUtils.draw(GetPath.PATH + "\\img\\tank_d.gif", x, y);//0,64
+                    DrawUtils.draw(Bullet.class.getResource("/res/img/tank_d.gif").getPath(), x, y);//0,64
                     break;
 
                 case LEFT:
                     //想绘制画一张坦克图片在我游戏窗体上,很简单,调用我绘制工具类DrawUtils.draw(图片路径,图片坐标);
-                    DrawUtils.draw(GetPath.PATH + "\\img\\tank_l.gif", x, y);//0,64
+                    DrawUtils.draw(Bullet.class.getResource("/res/img/tank_l.gif").getPath(), x, y);//0,64
                     break;
 
                 case RIGH:
                     //想绘制画一张坦克图片在我游戏窗体上,很简单,调用我绘制工具类DrawUtils.draw(图片路径,图片坐标);
-                    DrawUtils.draw(GetPath.PATH + "\\img\\tank_r.gif", x, y);//0,64
+                    DrawUtils.draw(Bullet.class.getResource("/res/img/tank_r.gif").getPath(), x, y);//0,64
                     break;
                 default:
                     break;

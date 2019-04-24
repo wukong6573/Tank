@@ -1,10 +1,13 @@
 package com.example.demo.game;
 
 
+import lombok.Data;
+
 /**
  * @author dell
  * 常量类,//由于上面的游戏标题,宽高,帧率这些东西以后还要用到,我就把这些东西抽取到一个常量类里面存起来,以后想通过类名.调用,开发技巧,先使用后创建,选中字母按ctr shif x变成大写
  */
+@Data
 public class Config{
 
 	public static final String TITLE = "坦克大战";

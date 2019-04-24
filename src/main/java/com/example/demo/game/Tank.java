@@ -1,6 +1,5 @@
 package com.example.demo.game;
 
-import com.example.demo.config.GetPath;
 import com.example.demo.util.DrawUtils;
 import lombok.Data;
 
@@ -18,7 +17,7 @@ public class Tank extends TankFactory{
         this.x=x;
         this.y=y;
         try {
-            int[] size = DrawUtils.getSize(GetPath.PATH + "\\img\\tank_u.gif");
+            int[] size = DrawUtils.getSize(Bullet.class.getResource("/res/img/tank_u.gif").getPath());
             this.width = size[0];
             this.height = size[1];
         } catch (IOException e) {

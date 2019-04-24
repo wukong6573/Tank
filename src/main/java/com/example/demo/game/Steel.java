@@ -1,6 +1,5 @@
 package com.example.demo.game;
 
-import com.example.demo.config.GetPath;
 import com.example.demo.util.DrawUtils;
 
 import java.io.IOException;
@@ -11,12 +10,12 @@ import java.io.IOException;
  * //画一堆墙水草铁等图片出来,先画墙出来,不会,模仿子弹集合,搞个墙集合,添加墙对象,然后在不但刷新方法里面遍历这个墙集合拿到每一个墙对象点调用墙类里面的draw方法绘制出来
 		//墙类不会写,模仿坦克类,图片,坐标和宽高,绘制自己方法,把墙图片,墙类,墙对象看成是一样的东西
  */
-public class Steel extends Pictrue implements Obstructer{//继承谁是谁的一种,墙水草铁都继承图片类,成为了图片
+public class Steel extends Pictrue {//继承谁是谁的一种,墙水草铁都继承图片类,成为了图片
 
 	public Steel(int x,int y){//x = 0,y = 64;
 		super(x, y);
 		try {
-			int[] size = DrawUtils.getSize(GetPath.PATH+"\\img\\steel.gif");
+			int[] size = DrawUtils.getSize(Bullet.class.getResource("/res/img/steel.gif").getPath());
 			this.width = size[0];
 			this.height = size[1];
 		} catch (IOException e) {
@@ -28,7 +27,7 @@ public class Steel extends Pictrue implements Obstructer{//继承谁是谁的一
 	public void draw(){
 		//想绘制画一张坦克图片在我游戏窗体上,很简单,调用我绘制工具类DrawUtils.draw(图片路径,图片坐标);
 		try {
-			DrawUtils.draw(GetPath.PATH+"\\img\\steel.gif", x, y);//0,64
+			DrawUtils.draw(Bullet.class.getResource("/res/img/steel.gif").getPath(), x, y);//0,64
 		} catch (IOException e) {
 			// TODO 自动生成的 catch 块
 			e.printStackTrace();

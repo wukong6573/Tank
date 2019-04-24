@@ -1,6 +1,6 @@
 package com.example.demo.game;
 
-public abstract class Pictrue implements Obstructer{
+public abstract class Pictrue{
 	protected int x;//0
 	protected int y;//64
 	protected int width;//0

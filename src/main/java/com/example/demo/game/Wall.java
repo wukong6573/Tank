@@ -1,6 +1,5 @@
 package com.example.demo.game;
 
-import com.example.demo.config.GetPath;
 import com.example.demo.util.DrawUtils;
 
 import java.io.IOException;
@@ -12,13 +11,13 @@ import java.io.IOException;
 		 *  代码复用性太差了,其实墙水草铁都是图片,抽取一个图片父类出来,让墙水草铁都去继承它,这样墙水草铁就成为图片,是图片就可以添加到图片集合统一存起来,
 	那就不要搞墙水草铁等集合,然后在不但刷新方法里面遍历这个图片集合拿到每一个图片对象点调里面的draw方法绘制出来,把每一个图片画出来,墙水草铁都就绘制出来了
  */
-public class Wall extends Pictrue implements Obstructer{
+public class Wall extends Pictrue {
 
 	public Wall(int x,int y){//x = 0,y = 64;
 		super(x,y);
 		//工具类绘制
 		try {
-			int[] size = DrawUtils.getSize(GetPath.PATH+"\\img\\wall.gif");
+			int[] size = DrawUtils.getSize(Bullet.class.getResource("/res/img/wall.gif").getPath());
 			this.width = size[0];
 			this.height = size[1];
 		} catch (IOException e) {
@@ -30,7 +29,7 @@ public class Wall extends Pictrue implements Obstructer{
 	public void draw(){
 		//想绘制画一张坦克图片在我游戏窗体上,很简单,调用我绘制工具类DrawUtils.draw(图片路径,图片坐标);
 		try {
-			DrawUtils.draw(GetPath.PATH+"\\img\\wall.gif", x, y);//0,64
+			DrawUtils.draw(Bullet.class.getResource("/res/img/wall.gif").getPath(), x, y);//0,64
 		} catch (IOException e) {
 			// TODO 自动生成的 catch 块
 			e.printStackTrace();

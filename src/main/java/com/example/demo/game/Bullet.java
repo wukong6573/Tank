@@ -1,6 +1,5 @@
 package com.example.demo.game;
 
-import com.example.demo.config.GetPath;
 import com.example.demo.util.CollsionUtils;
 import com.example.demo.util.DrawUtils;
 
@@ -32,7 +31,7 @@ public class Bullet {
 		//子弹宽高
 		//工具类绘制
 		try {
-			int[] size = DrawUtils.getSize(GetPath.PATH+"\\img\\bullet_u.gif");
+			int[] size = DrawUtils.getSize(Bullet.class.getResource("/res/img/bullet_u.gif").getPath());
 			this.width = size[0];
 			this.height = size[1];
 		} catch (IOException e) {
@@ -82,7 +81,8 @@ public class Bullet {
 			
 			//想绘制画一张坦克图片在我游戏窗体上,很简单,调用我绘制工具类DrawUtils.draw(图片路径,图片坐标);
 			try {
-				DrawUtils.draw(GetPath.PATH+"\\img\\bullet_u.gif", x, y);//0,0
+//				DrawUtils.draw(GetPath.PATH+"\\img\\bullet_u.gif", x, y);//0,0
+				DrawUtils.draw(Bullet.class.getResource("/res/img/bullet_u.gif").getPath(), x, y);//0,0
 			} catch (IOException e) {
 				// TODO 自动生成的 catch 块
 				e.printStackTrace();
@@ -93,7 +93,8 @@ public class Bullet {
 			y+=speed;
 			//想绘制画一张坦克图片在我游戏窗体上,很简单,调用我绘制工具类DrawUtils.draw(图片路径,图片坐标);
 			try {
-				DrawUtils.draw(GetPath.PATH+"\\img\\bullet_d.gif", x, y);//0,0
+//				DrawUtils.draw(GetPath.PATH+"\\img\\bullet_d.gif", x, y);//0,0
+				DrawUtils.draw(Bullet.class.getResource("/res/img/bullet_d.gif").getPath(), x, y);//0,0
 			} catch (IOException e) {
 				// TODO 自动生成的 catch 块
 				e.printStackTrace();
@@ -105,7 +106,7 @@ public class Bullet {
 			
 			//想绘制画一张坦克图片在我游戏窗体上,很简单,调用我绘制工具类DrawUtils.draw(图片路径,图片坐标);
 			try {
-				DrawUtils.draw(GetPath.PATH+"\\img\\bullet_l.gif", x, y);//0,0
+				DrawUtils.draw(Bullet.class.getResource("/res/img/bullet_l.gif").getPath(), x, y);//0,0
 			} catch (IOException e) {
 				// TODO 自动生成的 catch 块
 				e.printStackTrace();
@@ -117,7 +118,7 @@ public class Bullet {
 			
 			//想绘制画一张坦克图片在我游戏窗体上,很简单,调用我绘制工具类DrawUtils.draw(图片路径,图片坐标);
 			try {
-				DrawUtils.draw(GetPath.PATH+"\\img\\bullet_r.gif", x, y);//0,0
+				DrawUtils.draw(Bullet.class.getResource("/res/img/bullet_r.gif").getPath(), x, y);//0,0
 			} catch (IOException e) {
 				// TODO 自动生成的 catch 块
 				e.printStackTrace();
