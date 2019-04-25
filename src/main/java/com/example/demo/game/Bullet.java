@@ -10,11 +10,11 @@ import java.io.IOException;
  * //坦克发射子弹,你作为坦克对象应该具有发射子弹方法shot,写在坦克类,这个方法的返回值拿到子弹类对象名
 	//只要我拿到子弹对象名就调用子弹类里面draw方法绘制子弹图片,子弹类,图片,坐标宽高,绘制自己的方法draw方法,不会写,完全模仿坦克类
  */
-public class Bullet {
-	private int x;//0
-	private int y;//0
-	private int width;//0
-	private int height;//0
+public abstract class Bullet {
+	public int x;//0
+	public int y;//0
+	public int width;//0
+	public int height;//0
 
 	public int getX() {
 		return x;
@@ -24,8 +24,8 @@ public class Bullet {
 		return y;
 	}
 
-	private Direction direction;//null,成员变量,子弹方向,赋值来自坦克方向
-	private int speed = Config.SIZE/8;
+	public Direction direction;//null,成员变量,子弹方向,赋值来自坦克方向
+	public int speed = Config.SIZE/8;
 	
 	public Bullet(TankFactory tank) {//tank = tank对象名;坦克类对象名拿到了
 		//子弹宽高
@@ -144,41 +144,7 @@ public class Bullet {
 		return blast;
 	}
 
-	public Boolean checkHit(Pictrue p){
-		int x1 = p.x;
-		int y1 = p.y;
-		int w1 = p.width;
-		int h1 = p.height;
-
-		//坦克的坐标和宽高,this坦克对象名,谁来调用我就代表谁
-		int x2 = this.x;
-		int y2 = this.y;
-		int w2 = this.width;
-		int h2 = this.height;
-
-		switch (this.direction) {//坐标改变的逻辑
-			case UP:
-				y2 -= 32;
-				break;
-
-			case DOWN:
-				y2 += 32;
-				break;
-
-			case LEFT:
-				x2 -= 32;
-				break;
-
-			case RIGH:
-				x2 += 32;
-				break;
-
-			default:
-				break;
-		}
-		boolean flag = CollsionUtils.isCollsionWithRect(x1, y1, w1, h1, x2, y2, w2, h2);//true
-		return flag;
-	}
+	public abstract Boolean checkHit(Pictrue p);
 
 	public Boolean checkHit(TankFactory p){
 		int x1 = p.x;

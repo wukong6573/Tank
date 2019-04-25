@@ -3,7 +3,6 @@ package com.example.demo.game;
 import com.example.demo.util.Window;
 import org.lwjgl.input.Keyboard;
 
-import java.util.ArrayList;
 import java.util.Random;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -38,7 +37,7 @@ public class GameWindow extends Window {
         tank = new Tank(64 * 8, 0);//坦克对象名tank
 
         tank2 = new Tank2(64 * 10, 0);  //第二辆坦克
-        enemyTank = new EnemyTank(0, 0);
+        enemyTank = new EnemyTank(64 * 10, 64 * 7);
         home = new Home(Config.WIDTH / 2, Config.HEIGHT - 64);
         weapon = new Weapon(Config.WIDTH / 2, Config.HEIGHT - 64 * 3);
 
@@ -62,7 +61,9 @@ public class GameWindow extends Window {
 
         //结果对象
         result = new Result();
+
     }
+
 
     @Override
     protected void onMouseEvent(int key, int x, int y) {
@@ -129,8 +130,6 @@ public class GameWindow extends Window {
     }
 
     Random random = new Random();
-    ArrayList<Integer> nums=new ArrayList();
-
 
     @Override
     protected void onDisplayUpdate() {
@@ -141,9 +140,16 @@ public class GameWindow extends Window {
             //胜利
             result.drawWin();
         }
-        if (!list.contains(home)) {
-            //失败
-            result.drawFailue();
+//        if (!list.contains(home)) {
+//            //失败
+//            result.drawFailue();
+//        }
+
+        //产生随机方向,并发射子弹
+        int key = random.nextInt(4) + 1;
+        Bullet bu = enemyTank.getDirection(key).shot();
+        if (bu != null) {
+            blist.add(bu);
         }
     }
 
@@ -177,9 +183,14 @@ public class GameWindow extends Window {
                             if (p instanceof Home) {
                                 //子弹碰到家,直接GG,家的图片消失
                                 list.remove(p);
-                            } else if (tank.shotWall) {
-                                //其他图片需要强化武器才能被打掉
-                                list.remove(p);
+                            } else {
+                                if (tank instanceof Tank && ((Tank) tank).getShotWall() && bullet instanceof BulletOfTank) {
+                                    list.remove(p);
+                                } else if (tank instanceof Tank2 && ((Tank2) tank).getShotWall() && bullet instanceof BulletOfTank2) {
+                                    list.remove(p);
+                                } else if (tank instanceof EnemyTank && ((EnemyTank) tank).getShotWall() && bullet instanceof BulletOfEnemyTank) {
+                                    list.remove(p);
+                                }
                             }
                         }
                     }
@@ -191,10 +202,6 @@ public class GameWindow extends Window {
         for (Bullet bullet : blist) {
             bullet.draw();
         }
-
-        int key = random.nextInt(10000);
-        enemyTank.getDirection(key);
-
 
         for (TankFactory tank1 : tanks) {
             for (TankFactory tank2 : tanks) {
@@ -208,7 +215,13 @@ public class GameWindow extends Window {
                 if (tank1.checkHit(p)) {
                     if (p instanceof Weapon) {
                         //获取到打墙的buff
-                        tank1.shotWall = true;
+                        if (tank1 instanceof Tank) {
+                            ((Tank) tank1).setShotWall(true);
+                        } else if (tank1 instanceof Tank2) {
+                            ((Tank2) tank1).setShotWall(true);
+                        } else if (tank1 instanceof EnemyTank) {
+                            ((EnemyTank) tank1).setShotWall(true);
+                        }
                         list.remove(p);
                     }
 //                //如果检测到碰撞，一定要跳出循环,不跟其他铁比较,为什么???
