@@ -4,13 +4,19 @@ import com.example.demo.util.DrawUtils;
 import lombok.Data;
 
 import java.io.IOException;
+import java.util.Random;
 
 @Data
 public class EnemyTank extends TankFactory {
     private static int flag = 0;
+    private static int flag2 = 0;
 
     private Direction lastDirection;
     Boolean shotWall = false;
+    private Random random = new Random();
+
+    private Direction[] arr = {Direction.UP, Direction.DOWN, Direction.LEFT, Direction.RIGH};
+
 
     public EnemyTank(int x, int y) {
         this.x = x;
@@ -26,41 +32,47 @@ public class EnemyTank extends TankFactory {
     }
 
     //敌方坦克随机方向
-    public EnemyTank getDirection(int key) {
+    public EnemyTank getDirection(Pictrue p) {
         flag++;
         //每个方向进来,走两步再说
         if (flag > 50) {
-            if (key == 1) {
-                this.move(Direction.UP);
-                flag = 0;
-            } else if (key == 2) {
-                this.move(Direction.DOWN);
-                flag = 0;
-            } else if (key == 3) {
-                this.move(Direction.LEFT);
-                flag = 0;
-            } else if (key == 4) {
-                this.move(Direction.RIGH);
-                flag = 0;
+            flag = 0;
+            flag2=0;
+            int key = random.nextInt(arr.length);
+            this.move(arr[key]);
+            if(!this.checkHit(p)) {
+                lastDirection = this.direction;
             }
-            lastDirection = this.direction;
         } else {
-            if (lastDirection != null) {
+            if (lastDirection != null && !this.checkHit(p) && flag2 < 1) {
+                flag2++;
                 this.move(lastDirection);
-            }
+                if(this.step<1){
+                    Direction[] dirs=new Direction[arr.length-1];
+                    //如果这个方向动不了,就改方向
+                    for (int i = 0; i < arr.length; i++) {
+                        Direction dir=arr[i];
+                        if(dir !=lastDirection) {
+                            dirs[i]=dir;
+                        }
+                    }
+                    //从其他方向,随机取一个方向
+                    lastDirection=dirs[random.nextInt(dirs.length)];
+                    }
+                }
         }
         return this;
     }
 
-    public void draw(){
+    public void draw() {
         String up = "";
         String down = "";
         String left = "";
         String right = "";
-            up = "/res/img/enemy_1_u.gif";
-            down="/res/img/enemy_1_d.gif";
-            left="/res/img/enemy_1_l.gif";
-            right="/res/img/enemy_1_r.gif";
+        up = "/res/img/enemy_1_u.gif";
+        down = "/res/img/enemy_1_d.gif";
+        left = "/res/img/enemy_1_l.gif";
+        right = "/res/img/enemy_1_r.gif";
         try {
             switch (this.direction) {
                 case UP:
@@ -91,6 +103,7 @@ public class EnemyTank extends TankFactory {
     }
 
     private long last;
+
     public Bullet shot() {//shot只能被坦克类的对象名调用,this谁来调用我我就代表谁
         long now = System.currentTimeMillis();//子弹发射当前时间,我定义一个成员变量记住它表示上一次发射子弹的时间
         //如果当前时间减去上一次发射时间小于某个值,我就返回null,方法都结束,就不走创建子类对象的逻辑,如果大于某个值我就把当前时间赋值给成员变量上一次时间

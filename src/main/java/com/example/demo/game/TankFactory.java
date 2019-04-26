@@ -12,6 +12,8 @@ public abstract class TankFactory {
     Direction badDirection;
     Direction badDirection2;
 
+    int step=0;
+
     public abstract void draw();
 
     public void move(Direction direction) {
@@ -29,7 +31,7 @@ public abstract class TankFactory {
             //检测到碰撞，不能继续往前走
             return;
         }
-
+        step++;
         //根据坦克不同的方向做不同坐标改变
         switch (direction) {//坐标改变的逻辑
             case UP:

@@ -3,7 +3,6 @@ package com.example.demo.game;
 import com.example.demo.util.Window;
 import org.lwjgl.input.Keyboard;
 
-import java.util.Random;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 
@@ -129,8 +128,6 @@ public class GameWindow extends Window {
         }
     }
 
-    Random random = new Random();
-
     @Override
     protected void onDisplayUpdate() {
         //第一个版本,内容包括:移动,碰撞,子弹销毁产生爆炸
@@ -145,12 +142,7 @@ public class GameWindow extends Window {
 //            result.drawFailue();
 //        }
 
-        //产生随机方向,并发射子弹
-        int key = random.nextInt(4) + 1;
-        Bullet bu = enemyTank.getDirection(key).shot();
-        if (bu != null) {
-            blist.add(bu);
-        }
+
     }
 
     private void version_1() {
@@ -201,6 +193,15 @@ public class GameWindow extends Window {
 
         for (Bullet bullet : blist) {
             bullet.draw();
+        }
+
+        for (Pictrue p : list) {
+            //产生随机方向,并发射子弹
+            Bullet bu = enemyTank.getDirection(p).shot();
+            if (bu != null) {
+                blist.add(bu);
+            }
+            break;
         }
 
         for (TankFactory tank1 : tanks) {
