@@ -41,7 +41,7 @@ public class EnemyTank extends TankFactory {
     }
 
     //敌方坦克随机方向
-    public EnemyTank getDirection(Pictrue p) {
+    public EnemyTank getDirection() {
         boolean go_up = false;
         boolean go_down = false;
         boolean go_left = false;

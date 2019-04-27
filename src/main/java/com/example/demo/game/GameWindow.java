@@ -146,11 +146,31 @@ public class GameWindow extends Window {
     }
 
     private void version_1() {
+
+        for (TankFactory tank1 : tanks) {
+            for (Pictrue p : list) {
+                //坦克碰到图片,就停下
+                if (tank1.checkHit(p)) {
+                    if (p instanceof Weapon) {
+                        //获取到打墙的buff
+                        if (tank1 instanceof Tank) {
+                            ((Tank) tank1).setShotWall(true);
+                        } else if (tank1 instanceof Tank2) {
+                            System.out.println("坦克2 子弹增强");
+                            ((Tank2) tank1).setShotWall(true);
+                        } else if (tank1 instanceof EnemyTank) {
+                            ((EnemyTank) tank1).setShotWall(true);
+                        }
+                        list.remove(p);
+                    }
+//                //如果检测到碰撞，一定要跳出循环,不跟其他铁比较,为什么???
+                    break;
+                }
+            }
+        }
         //子弹碰撞坦克,也会发生爆炸
         for (TankFactory tank : tanks) {
-            tank.draw();
             for (Pictrue p : list) {
-                p.draw();
                 for (Bullet bullet : blist) {
                     //如果子弹碰到坦克
                     if (bullet.checkHit(tank)) {
@@ -170,17 +190,20 @@ public class GameWindow extends Window {
 
                         } else {
                             bullet.boom().draw();
-                            //子弹碰到图片,图片也消失
                             blist.remove(bullet);
+                            //子弹碰到图片,图片也消失
                             if (p instanceof Home) {
                                 //子弹碰到家,直接GG,家的图片消失
                                 list.remove(p);
                             } else {
                                 if (tank instanceof Tank && ((Tank) tank).getShotWall() && bullet instanceof BulletOfTank) {
                                     list.remove(p);
-                                } else if (tank instanceof Tank2 && ((Tank2) tank).getShotWall() && bullet instanceof BulletOfTank2) {
+                                }
+
+                                if (tank instanceof Tank2 && ((Tank2) tank).getShotWall() && bullet instanceof BulletOfTank2) {
                                     list.remove(p);
-                                } else if (tank instanceof EnemyTank && ((EnemyTank) tank).getShotWall() && bullet instanceof BulletOfEnemyTank) {
+                                }
+                                if (tank instanceof EnemyTank && ((EnemyTank) tank).getShotWall() && bullet instanceof BulletOfEnemyTank) {
                                     list.remove(p);
                                 }
                             }
@@ -191,41 +214,27 @@ public class GameWindow extends Window {
             }
         }
 
+        //产生随机方向,并发射子弹
+        Bullet bu = enemyTank.getDirection().shot();
+        if (bu != null) {
+            blist.add(bu);
+        }
         for (Bullet bullet : blist) {
             bullet.draw();
         }
 
+        for (TankFactory tankFactory : tanks) {
+            tankFactory.draw();
+        }
+
         for (Pictrue p : list) {
-            //产生随机方向,并发射子弹
-            Bullet bu = enemyTank.getDirection(p).shot();
-            if (bu != null) {
-                blist.add(bu);
-            }
-            break;
+            p.draw();
         }
 
         for (TankFactory tank1 : tanks) {
             for (TankFactory tank2 : tanks) {
                 //坦克碰到坦克,也要停下来
                 if (tank1.checkHit(tank2)) {
-                    break;
-                }
-            }
-            for (Pictrue p : list) {
-                //坦克碰到图片,就停下
-                if (tank1.checkHit(p)) {
-                    if (p instanceof Weapon) {
-                        //获取到打墙的buff
-                        if (tank1 instanceof Tank) {
-                            ((Tank) tank1).setShotWall(true);
-                        } else if (tank1 instanceof Tank2) {
-                            ((Tank2) tank1).setShotWall(true);
-                        } else if (tank1 instanceof EnemyTank) {
-                            ((EnemyTank) tank1).setShotWall(true);
-                        }
-                        list.remove(p);
-                    }
-//                //如果检测到碰撞，一定要跳出循环,不跟其他铁比较,为什么???
                     break;
                 }
             }
