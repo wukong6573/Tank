@@ -13,7 +13,7 @@ public class EnemyTank extends TankFactory {
     private static int flag = 0;
     Boolean shotWall = false;
     private Random random = new Random();
-    private  ArrayList<Direction> dirs=new ArrayList<>();
+    private ArrayList<Direction> dirs = new ArrayList<>();
 
     public EnemyTank(int x, int y) {
         dirs.add(Direction.UP);
@@ -33,8 +33,9 @@ public class EnemyTank extends TankFactory {
     }
 
     //敌方坦克追踪目标坦克
-    public EnemyTank getDirection(TankFactory tank,CopyOnWriteArrayList<Pictrue> list) {
-        if(dirs.size()==0){
+    public EnemyTank getDirection(TankFactory tank, CopyOnWriteArrayList<Pictrue> list) {
+
+        if (dirs.size() == 0) {
             dirs.add(Direction.UP);
             dirs.add(Direction.DOWN);
             dirs.add(Direction.LEFT);
@@ -51,34 +52,56 @@ public class EnemyTank extends TankFactory {
         flag++;
         //每个方向进来,走两步再说
         if (flag > 10) {
-            System.out.println(dirs.size());
+            if (tan_y < this.y && tan_x<this.x) {
+                //左上方
+
+            } else if (tan_y < this.y && tan_x>this.x) {
+                //右上方
+
+            } else if (tan_x < this.x && tan_y>this.y) {
+                //左下方
+
+            } else if (tan_x > this.x && tan_y<this.y) {
+                //右下方
+
+            }else if(tan_y == this.y && tan_x<this.x){
+                //左边
+                this.direction=Direction.LEFT;
+            }else if(tan_y == this.y && tan_x>this.x){
+                //右边
+                this.direction=Direction.RIGH;
+            }else if(tan_y < this.y && tan_x==this.x){
+                //上边
+                this.direction=Direction.UP;
+            }else if(tan_y > this.y && tan_x==this.x){
+                //下边
+                this.direction=Direction.DOWN;
+            }
             flag = 0;
-            System.out.println(this.direction);
             this.move(this.direction);
 
-
             //如果碰到图片,就要转变方向
-            for (Pictrue p : list) {
-                if (this.checkHit(p)) {
-                    dirs.remove(this.direction);
-                    this.direction = dirs.get(random.nextInt(dirs.size()));
-                    break;
-                    //这里一定要加一个break,不再和其他的图片比较,因为和其他图片肯定是不会碰撞的,所以会走到else..语句里,,造成bug
-                }else {
-                    if (tan_y < this.y) {
-                        this.direction = Direction.UP;
-                    } else if (tan_y > this.y) {
-                        this.direction = Direction.DOWN;
-                    } else if (tan_x < this.x) {
-                        this.direction = Direction.LEFT;
-                    } else if (tan_x > this.x) {
-                        this.direction = Direction.RIGH;
-                    }
-                }
+//            for (Pictrue p : list) {
+//                if (this.checkHit(p)) {
+//                    dirs.remove(this.direction);
+//                    this.direction = dirs.get(random.nextInt(dirs.size()));
+//                    break;
+//                    //这里一定要加一个break,不再和其他的图片比较,因为和其他图片肯定是不会碰撞的,所以会走到else..语句里,,造成bug
+//                } else {
+////                    //无障碍物阻挡式追踪
+////                    if (tan_y < this.y) {
+////                        this.direction = Direction.UP;
+////                    } else if (tan_y > this.y) {
+////                        this.direction = Direction.DOWN;
+////                    } else if (tan_x < this.x) {
+////                        this.direction = Direction.LEFT;
+////                    } else if (tan_x > this.x) {
+////                        this.direction = Direction.RIGH;
+////                    }
+//                }
 
             }
 
-        }
         return this;
     }
 
