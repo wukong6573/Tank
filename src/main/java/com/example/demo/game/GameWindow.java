@@ -40,14 +40,14 @@ public class GameWindow extends Window {
         home = new Home(Config.WIDTH / 2, Config.HEIGHT - 64);
         weapon = new Weapon(Config.WIDTH / 2, Config.HEIGHT - 64 * 3);
 
-        for (int i = 0; i < 6; i++) {//0-17
+        for (int i = 1; i < 12; i++) {//0-17
             Wall wall = new Wall(Config.SIZE * i, Config.SIZE * 1);
             Water water = new Water(Config.SIZE * i, Config.SIZE * 3);
             Grass grass = new Grass(Config.SIZE * i, Config.SIZE * 5);
-            Steel steel = new Steel(Config.SIZE * i, Config.SIZE * 7);
+//            Steel steel = new Steel(Config.SIZE * i, Config.SIZE * 7);
             list.add(water);
             list.add(grass);
-            list.add(steel);
+//            list.add(steel);
             list.add(wall);
         }
         list.add(home);
@@ -225,17 +225,16 @@ public class GameWindow extends Window {
 
         for (TankFactory tankFactory : tanks) {
             tankFactory.draw();
-            //产生随机方向,并发射子弹
-            if (tankFactory instanceof Tank) {
-                Bullet bu = enemyTank.getDirection(tankFactory).shot();
-                if (bu != null) {
-                    blist.add(bu);
-                }
-            }
         }
 
         for (Pictrue p : list) {
             p.draw();
+        }
+
+            //AI坦克方向,并发射子弹
+            Bullet bu = enemyTank.getDirection(tank,list).shot();
+            if (bu != null) {
+                blist.add(bu);
         }
 
         for (TankFactory tank1 : tanks) {

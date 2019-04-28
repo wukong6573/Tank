@@ -4,16 +4,22 @@ import com.example.demo.util.DrawUtils;
 import lombok.Data;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Random;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 @Data
 public class EnemyTank extends TankFactory {
     private static int flag = 0;
     Boolean shotWall = false;
     private Random random = new Random();
-
+    private  ArrayList<Direction> dirs=new ArrayList<>();
 
     public EnemyTank(int x, int y) {
+        dirs.add(Direction.UP);
+        dirs.add(Direction.DOWN);
+        dirs.add(Direction.LEFT);
+        dirs.add(Direction.RIGH);
         this.x = x;
         this.y = y;
         try {
@@ -27,12 +33,13 @@ public class EnemyTank extends TankFactory {
     }
 
     //敌方坦克追踪目标坦克
-    public EnemyTank getDirection(TankFactory tank) {
-        boolean go_up = false;
-        boolean go_down = false;
-        boolean go_left = false;
-        boolean go_right = false;
-
+    public EnemyTank getDirection(TankFactory tank,CopyOnWriteArrayList<Pictrue> list) {
+        if(dirs.size()==0){
+            dirs.add(Direction.UP);
+            dirs.add(Direction.DOWN);
+            dirs.add(Direction.LEFT);
+            dirs.add(Direction.RIGH);
+        }
         int tan_x = 0;
         int tan_y = 0;
 
@@ -44,122 +51,31 @@ public class EnemyTank extends TankFactory {
         flag++;
         //每个方向进来,走两步再说
         if (flag > 10) {
+            System.out.println(dirs.size());
             flag = 0;
-            //移动前的坐标
-            int mb_x = this.x;
-            int mb_y = this.y;
+            System.out.println(this.direction);
             this.move(this.direction);
 
-            boolean left_stop = (this.direction == Direction.LEFT) && mb_x == this.x;  //左右方向移动不了
-            boolean right_stop = (this.direction == Direction.RIGH) && mb_x == this.x;  //左右方向移动不了
-            boolean up_stop = (this.direction == Direction.UP) && mb_y == this.y;  //上下 移动不了
-            boolean down_stop = (this.direction == Direction.DOWN) && mb_y == this.y;  //上下 移动不了
 
-            if (left_stop) {//左边前进不了,并且忽略转向带来的错误"不可通过" 判定
-                //如果追到目标坦克,不要移除方向
-                if (!this.checkHit(tank)) {
-//                    list.remove(Direction.LEFT);
-                    System.out.println("left方向被移除");
-                    if (tan_y > this.y) {
-                        this.direction = Direction.DOWN;
-                    } else if (tan_y < this.y) {
-                        this.direction = Direction.UP;
-                    } else if (tan_x > this.x) {
-                        this.direction = Direction.RIGH;
-                    }
-                }
-            } else {
-                //否则就告诉AI坦克,这个方向可以走
-                go_left = true;
-            }
-
-            if (right_stop) { //右边前进不了
-                //如果追到目标坦克,不要移除方向
-                if (!this.checkHit(tank)) {
-                    //不再产生随机方向,根据目标坦克的位置,选择方向
-                    if (tan_y > this.y) {
-                        this.direction = Direction.DOWN;
-                    } else if (tan_x < this.x) {
-                        this.direction = Direction.LEFT;
-                    } else if (tan_y < this.y) {
-                        this.direction = Direction.UP;
-                    }
-                }
-            } else {
-                go_right = true;
-            }
-            if (up_stop) {
-                //如果追到目标坦克,不要移除方向
-                if (!this.checkHit(tank)) {
-                    if (tan_y > this.y) {
-                        this.direction = Direction.DOWN;
-                    } else if (tan_x < this.x) {
-                        this.direction = Direction.LEFT;
-                    } else if (tan_x > this.x) {
-                        this.direction = Direction.RIGH;
-                    }
-                }
-            } else {
-                go_up = true;
-            }
-            if (down_stop) {
-                //如果追到目标坦克,不要移除方向
-                if (!this.checkHit(tank)) {
+            //如果碰到图片,就要转变方向
+            for (Pictrue p : list) {
+                if (this.checkHit(p)) {
+                    dirs.remove(this.direction);
+                    this.direction = dirs.get(random.nextInt(dirs.size()));
+                    break;
+                    //这里一定要加一个break,不再和其他的图片比较,因为和其他图片肯定是不会碰撞的,所以会走到else..语句里,,造成bug
+                }else {
                     if (tan_y < this.y) {
                         this.direction = Direction.UP;
+                    } else if (tan_y > this.y) {
+                        this.direction = Direction.DOWN;
                     } else if (tan_x < this.x) {
                         this.direction = Direction.LEFT;
                     } else if (tan_x > this.x) {
                         this.direction = Direction.RIGH;
                     }
                 }
-            } else {
-                go_down = true;
-            }
 
-            if (go_up) {  //这里注意加else ,能往上走就尽量优先往上走,避免两次设置方向,优先选择当前能跑的方向
-                if (tan_y < this.y) {
-                    this.direction = Direction.UP;
-                } else if (tan_y > this.y) {
-                    this.direction = Direction.DOWN;
-                } else if (tan_x < this.x) {
-                    this.direction = Direction.LEFT;
-                } else if (tan_x > this.x) {
-                    this.direction = Direction.RIGH;
-                }
-            }
-            if (go_down) {
-                if (tan_y > this.y) {
-                    this.direction = Direction.DOWN;
-                } else if (tan_y < this.y) {
-                    this.direction = Direction.UP;
-                } else if (tan_x < this.x) {
-                    this.direction = Direction.LEFT;
-                } else if (tan_x > this.x) {
-                    this.direction = Direction.RIGH;
-                }
-            }
-            if (go_left) {
-                if (tan_x < this.x) {
-                    this.direction = Direction.LEFT;
-                } else if (tan_y > this.y) {
-                    this.direction = Direction.DOWN;
-                } else if (tan_y < this.y) {
-                    this.direction = Direction.UP;
-                } else if (tan_x > this.x) {
-                    this.direction = Direction.RIGH;
-                }
-            }
-            if (go_right) {
-                if (tan_x > this.x) {
-                    this.direction = Direction.RIGH;
-                } else if (tan_y > this.y) {
-                    this.direction = Direction.DOWN;
-                } else if (tan_y < this.y) {
-                    this.direction = Direction.UP;
-                } else if (tan_x < this.x) {
-                    this.direction = Direction.LEFT;
-                }
             }
 
         }
