@@ -156,7 +156,6 @@ public class GameWindow extends Window {
                         if (tank1 instanceof Tank) {
                             ((Tank) tank1).setShotWall(true);
                         } else if (tank1 instanceof Tank2) {
-                            System.out.println("坦克2 子弹增强");
                             ((Tank2) tank1).setShotWall(true);
                         } else if (tank1 instanceof EnemyTank) {
                             ((EnemyTank) tank1).setShotWall(true);
@@ -187,44 +186,52 @@ public class GameWindow extends Window {
                     if (bullet.checkHit(p)) {
                         //如果图片是增益buff,不会被子弹打掉
                         if (p instanceof Weapon) {
-
+                            //武器buff对子弹免疫
+                        } else if (p instanceof Home) {
+                            //子弹碰到家,直接GG,家的图片消失
+                            bullet.boom().draw();
+                            blist.remove(bullet);
+                            list.remove(p);
                         } else {
                             bullet.boom().draw();
                             blist.remove(bullet);
-                            //子弹碰到图片,图片也消失
-                            if (p instanceof Home) {
-                                //子弹碰到家,直接GG,家的图片消失
-                                list.remove(p);
-                            } else {
-                                if (tank instanceof Tank && ((Tank) tank).getShotWall() && bullet instanceof BulletOfTank) {
+                            //这里还要套个循环
+                            for (TankFactory tank2 : tanks) {
+                                if (tank2 instanceof Tank && ((Tank) tank2).getShotWall() && bullet instanceof BulletOfTank) {
+                                    //子弹碰到图片,图片也消失
                                     list.remove(p);
                                 }
 
-                                if (tank instanceof Tank2 && ((Tank2) tank).getShotWall() && bullet instanceof BulletOfTank2) {
+                                if (tank2 instanceof Tank2 && ((Tank2) tank2).getShotWall() && bullet instanceof BulletOfTank2) {
                                     list.remove(p);
                                 }
-                                if (tank instanceof EnemyTank && ((EnemyTank) tank).getShotWall() && bullet instanceof BulletOfEnemyTank) {
+                                if (tank2 instanceof EnemyTank && ((EnemyTank) tank2).getShotWall() && bullet instanceof BulletOfEnemyTank) {
                                     list.remove(p);
                                 }
                             }
+
                         }
+                        break;
                     }
                 }
 
             }
         }
 
-        //产生随机方向,并发射子弹
-        Bullet bu = enemyTank.getDirection().shot();
-        if (bu != null) {
-            blist.add(bu);
-        }
+
         for (Bullet bullet : blist) {
             bullet.draw();
         }
 
         for (TankFactory tankFactory : tanks) {
             tankFactory.draw();
+            //产生随机方向,并发射子弹
+            if (tankFactory instanceof Tank) {
+                Bullet bu = enemyTank.getDirection(tankFactory).shot();
+                if (bu != null) {
+                    blist.add(bu);
+                }
+            }
         }
 
         for (Pictrue p : list) {

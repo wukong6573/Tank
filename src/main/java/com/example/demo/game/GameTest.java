@@ -8,5 +8,11 @@ public class GameTest{
 	public static void main(String[] args) {
 //		GameWindow gw = new GameWindow(Config.TITLE, Config.WIDTH, Config.HEIGHT, Config.FPS);
 //		gw.start();
+		int i=2;
+		if(i>1){
+			System.out.println("大于1");
+		}else if(i>0){
+			System.out.println("大于0");
+		}
 	}
 }

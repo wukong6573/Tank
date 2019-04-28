@@ -80,5 +80,9 @@ public class Tank2 extends TankFactory{
         return bullet;
     }
 
+    @Override
+    public String toString() {
+        return "Tank2{}";
+    }
 }
 
