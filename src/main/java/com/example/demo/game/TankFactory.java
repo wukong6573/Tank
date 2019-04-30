@@ -11,6 +11,9 @@ public abstract class TankFactory {
     int speed = Config.SIZE / 2;//坦克的速度
     Direction badDirection;
     Direction badDirection2;
+     int F;//和值，G+H
+     int G;//该点到出发点的移动量
+     int H;//该店到目的点的估算移动辆
 
 
     public abstract void draw();

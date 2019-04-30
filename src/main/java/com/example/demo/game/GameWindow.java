@@ -3,6 +3,7 @@ package com.example.demo.game;
 import com.example.demo.util.Window;
 import org.lwjgl.input.Keyboard;
 
+import java.util.ArrayList;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 
@@ -17,11 +18,15 @@ public class GameWindow extends Window {
     private Result result;
     private Home home;  //代表守卫的家
     private Weapon weapon;
+    private AutoFindHim autoFindHim;
     //集合不用ArrayList否则出现并发修改异常,改用能解决这个异常集合跟ArrayList差不多,名字叫CopyOnWriterArrayList
     private CopyOnWriteArrayList<Bullet> blist = new CopyOnWriteArrayList<>();//子弹类集合blist
 
     private CopyOnWriteArrayList<Pictrue> list = new CopyOnWriteArrayList<>();//图片集合list
-    private CopyOnWriteArrayList<Pictrue> list2 = new CopyOnWriteArrayList<>();//图片集合list
+    public static ArrayList<FKPosition> zhangaiList = new ArrayList<>();
+    public static ArrayList<FKPosition> openList = new ArrayList<>();
+    public static ArrayList<FKPosition> closedList = new ArrayList<>();
+    //    private CopyOnWriteArrayList<Pictrue> list2 = new CopyOnWriteArrayList<>();//图片集合list
     private CopyOnWriteArrayList<TankFactory> tanks = new CopyOnWriteArrayList<>();//爆炸物集合list
 
     public GameWindow(String title, int width, int height, int fps) {
@@ -33,10 +38,10 @@ public class GameWindow extends Window {
     @Override
     protected void onCreate() {
 
-        tank = new Tank(64 * 8, 0);//坦克对象名tank
+        tank = new Tank(64 * 8, 0);//坦克对象名tank, 作为自动寻路的终点
 
         tank2 = new Tank2(64 * 10, 0);  //第二辆坦克
-        enemyTank = new EnemyTank(64 * 10, 64 * 7);
+        enemyTank = new EnemyTank(64 * 10, 64 * 7);  // 自动寻路的起点
         home = new Home(Config.WIDTH / 2, Config.HEIGHT - 64);
         weapon = new Weapon(Config.WIDTH / 2, Config.HEIGHT - 64 * 3);
 
@@ -49,10 +54,13 @@ public class GameWindow extends Window {
             list.add(grass);
 //            list.add(steel);
             list.add(wall);
+            zhangaiList.add(new FKPosition(wall.x/Config.SIZE,wall.y/Config.SIZE));
+            zhangaiList.add(new FKPosition(water.x/Config.SIZE,water.y/Config.SIZE));
+            zhangaiList.add(new FKPosition(grass.x/Config.SIZE,grass.y/Config.SIZE));
         }
         list.add(home);
         list.add(weapon);
-        list2.addAll(list);
+//        list2.addAll(list);
 
         tanks.add(tank);
         tanks.add(tank2);
@@ -133,10 +141,10 @@ public class GameWindow extends Window {
         //第一个版本,内容包括:移动,碰撞,子弹销毁产生爆炸
         version_1();
 
-        if (list.size() <= list2.size() - 24) {
-            //胜利
-            result.drawWin();
-        }
+//        if (list.size() <= list2.size() - 24) {
+//            //胜利
+//            result.drawWin();
+//        }
 //        if (!list.contains(home)) {
 //            //失败
 //            result.drawFailue();
@@ -231,10 +239,10 @@ public class GameWindow extends Window {
             p.draw();
         }
 
-            //AI坦克方向,并发射子弹
-            Bullet bu = enemyTank.getDirection(tank,list).shot();
-            if (bu != null) {
-                blist.add(bu);
+        //AI坦克方向,并发射子弹
+        Bullet bu = enemyTank.getDirection(tank).shot();
+        if (bu != null) {
+            blist.add(bu);
         }
 
         for (TankFactory tank1 : tanks) {

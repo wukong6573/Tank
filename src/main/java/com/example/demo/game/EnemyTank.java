@@ -6,13 +6,14 @@ import lombok.Data;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 @Data
 public class EnemyTank extends TankFactory {
     private static int flag = 0;
     Boolean shotWall = false;
     private Random random = new Random();
+    private AutoFindHim autoFindHim = new AutoFindHim();
+    public  ArrayList<FKPosition> wayList=new ArrayList<>();
     private ArrayList<Direction> dirs = new ArrayList<>();
 
     public EnemyTank(int x, int y) {
@@ -33,7 +34,7 @@ public class EnemyTank extends TankFactory {
     }
 
     //敌方坦克追踪目标坦克
-    public EnemyTank getDirection(TankFactory tank, CopyOnWriteArrayList<Pictrue> list) {
+    public EnemyTank getDirection(Tank tank){
 
         if (dirs.size() == 0) {
             dirs.add(Direction.UP);
@@ -41,43 +42,16 @@ public class EnemyTank extends TankFactory {
             dirs.add(Direction.LEFT);
             dirs.add(Direction.RIGH);
         }
-        int tan_x = 0;
-        int tan_y = 0;
+        int tan_x = tank.x;
+        int tan_y = tank.y;
 
-        //实现AI坦克自动寻找目标的功能
-        if (tank instanceof Tank) {
-            tan_x = tank.x;
-            tan_y = tank.y;
-        }
         flag++;
         //每个方向进来,走两步再说
         if (flag > 10) {
-            if (tan_y < this.y && tan_x<this.x) {
-                //左上方
 
-            } else if (tan_y < this.y && tan_x>this.x) {
-                //右上方
-
-            } else if (tan_x < this.x && tan_y>this.y) {
-                //左下方
-
-            } else if (tan_x > this.x && tan_y<this.y) {
-                //右下方
-
-            }else if(tan_y == this.y && tan_x<this.x){
-                //左边
-                this.direction=Direction.LEFT;
-            }else if(tan_y == this.y && tan_x>this.x){
-                //右边
-                this.direction=Direction.RIGH;
-            }else if(tan_y < this.y && tan_x==this.x){
-                //上边
-                this.direction=Direction.UP;
-            }else if(tan_y > this.y && tan_x==this.x){
-                //下边
-                this.direction=Direction.DOWN;
-            }
+            wayList = autoFindHim.getWayLine(this, tank);
             flag = 0;
+            this.tankMove(wayList);
             this.move(this.direction);
 
             //如果碰到图片,就要转变方向
@@ -88,21 +62,58 @@ public class EnemyTank extends TankFactory {
 //                    break;
 //                    //这里一定要加一个break,不再和其他的图片比较,因为和其他图片肯定是不会碰撞的,所以会走到else..语句里,,造成bug
 //                } else {
-////                    //无障碍物阻挡式追踪
-////                    if (tan_y < this.y) {
-////                        this.direction = Direction.UP;
-////                    } else if (tan_y > this.y) {
-////                        this.direction = Direction.DOWN;
-////                    } else if (tan_x < this.x) {
-////                        this.direction = Direction.LEFT;
-////                    } else if (tan_x > this.x) {
-////                        this.direction = Direction.RIGH;
-////                    }
+//                    //无障碍物阻挡式追踪
+//                    if (tan_y < this.y) {
+//                        this.direction = Direction.UP;
+//                    } else if (tan_y > this.y) {
+//                        this.direction = Direction.DOWN;
+//                    } else if (tan_x < this.x) {
+//                        this.direction = Direction.LEFT;
+//                    } else if (tan_x > this.x) {
+//                        this.direction = Direction.RIGH;
+//                    }
 //                }
+//            }
+        }
+        return this;
+    }
 
+    private void tankMove(ArrayList<FKPosition> wayList){
+        System.out.println("准备移动了");
+
+        if (wayList == null || wayList.size() == 0) {
+            System.out.println("无法 到达终点 ！");
+            return;
+        }
+        System.out.println(wayList.size());
+
+        for (int i = wayList.size() - 2; i >= 0; i--) {
+            FKPosition fk = wayList.get(i);
+            //向上
+            if (this.y / Config.SIZE > fk.getY()) {
+                this.direction=Direction.UP;
+                break;
             }
 
-        return this;
+            //向下
+            if (this.y / Config.SIZE < fk.getY()) {
+                this.direction=Direction.DOWN;
+                break;
+            }
+
+            //向左
+            if (this.x / Config.SIZE > fk.getX()) {
+                this.direction=Direction.LEFT;
+                break;
+            }
+
+            //向右
+            if (this.x / Config.SIZE < fk.getX()) {
+                this.direction=Direction.RIGH;
+                break;
+            }
+
+        }
     }
 
     public void draw() {

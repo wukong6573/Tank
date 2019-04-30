@@ -26,7 +26,7 @@ public class AutoFindWay {
      * 获取路线方法入口
      * @param cat	起点
      * @param fish	终点
-     * @return	路线集合List<FangKuaiPosition>
+     * @return	路线集合List<FKPosition>
      */
     public List<FangKuaiPosition> getWayLine(MyPanel cat, MyPanel fish){
         //定义返回的结果
@@ -117,7 +117,6 @@ public class AutoFindWay {
                     //所以需要赋值i=-1,因为continue的时候会执行一次i++
                     BasePanel.closedList.remove(BasePanel.closedList.get(i));
                     i = -1;
-
                 }
                 continue;
             }
@@ -128,7 +127,6 @@ public class AutoFindWay {
                 wayList.add(BasePanel.closedList.get(i));
                 BasePanel.closedList.remove(BasePanel.closedList.get(i));
                 i = -1;
-                continue;
             }
         }
 
