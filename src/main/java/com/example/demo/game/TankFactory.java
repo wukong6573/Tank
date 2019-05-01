@@ -8,7 +8,7 @@ public abstract class TankFactory {
     int y;//0
     int width;//0
     int height;//0
-    int speed = Config.SIZE / 2;//坦克的速度
+    int speed = Config.SIZE/2;//坦克的速度
     Direction badDirection;
     Direction badDirection2;
      int F;//和值，G+H
@@ -125,7 +125,7 @@ public abstract class TankFactory {
         return flag;
     }
 
-    public Boolean checkHit(TankFactory p) {
+    public Boolean checkHit(com.example.demo.game.TankFactory p) {
         if (this.equals(p)) {
             //不能和自己碰撞
             return false;

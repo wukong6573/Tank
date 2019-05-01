@@ -5,22 +5,20 @@ import lombok.Data;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 @Data
 public class EnemyTank extends TankFactory {
     private static int flag = 0;
     Boolean shotWall = false;
+    private int speed= Config.SIZE;
     private Random random = new Random();
-    private AutoFindHim autoFindHim = new AutoFindHim();
-    public  ArrayList<FKPosition> wayList=new ArrayList<>();
-    private ArrayList<Direction> dirs = new ArrayList<>();
+    private AutoFindHim autoFindHim;
+    public List<FKPosition> wayList = new ArrayList<>();
+    private static int i = 0;
 
     public EnemyTank(int x, int y) {
-        dirs.add(Direction.UP);
-        dirs.add(Direction.DOWN);
-        dirs.add(Direction.LEFT);
-        dirs.add(Direction.RIGH);
         this.x = x;
         this.y = y;
         try {
@@ -34,86 +32,55 @@ public class EnemyTank extends TankFactory {
     }
 
     //敌方坦克追踪目标坦克
-    public EnemyTank getDirection(Tank tank){
-
-        if (dirs.size() == 0) {
-            dirs.add(Direction.UP);
-            dirs.add(Direction.DOWN);
-            dirs.add(Direction.LEFT);
-            dirs.add(Direction.RIGH);
-        }
-        int tan_x = tank.x;
-        int tan_y = tank.y;
+    public com.example.demo.game.EnemyTank getDirection(Tank tank) {
 
         flag++;
         //每个方向进来,走两步再说
         if (flag > 10) {
-
+            autoFindHim = new AutoFindHim();
             wayList = autoFindHim.getWayLine(this, tank);
+            //第一个是终点坐标，倒数第一个方块是 起点坐标，倒数第二个是与起点相邻的路线方块
+            i = wayList.size() - 2;
             flag = 0;
-            this.tankMove(wayList);
-            this.move(this.direction);
-
-            //如果碰到图片,就要转变方向
-//            for (Pictrue p : list) {
-//                if (this.checkHit(p)) {
-//                    dirs.remove(this.direction);
-//                    this.direction = dirs.get(random.nextInt(dirs.size()));
-//                    break;
-//                    //这里一定要加一个break,不再和其他的图片比较,因为和其他图片肯定是不会碰撞的,所以会走到else..语句里,,造成bug
-//                } else {
-//                    //无障碍物阻挡式追踪
-//                    if (tan_y < this.y) {
-//                        this.direction = Direction.UP;
-//                    } else if (tan_y > this.y) {
-//                        this.direction = Direction.DOWN;
-//                    } else if (tan_x < this.x) {
-//                        this.direction = Direction.LEFT;
-//                    } else if (tan_x > this.x) {
-//                        this.direction = Direction.RIGH;
-//                    }
-//                }
-//            }
+            Direction direction = this.tankMove(wayList);
+            if (direction != null) {
+                this.move(direction);
+            }
         }
         return this;
     }
 
-    private void tankMove(ArrayList<FKPosition> wayList){
-        System.out.println("准备移动了");
 
+    private Direction tankMove(List<FKPosition> wayList) {
+        if (i == 0) {
+            System.out.println("到达终点");
+            return null;
+        }
         if (wayList == null || wayList.size() == 0) {
             System.out.println("无法 到达终点 ！");
-            return;
+            return Direction.UP;
         }
-        System.out.println(wayList.size());
-
-        for (int i = wayList.size() - 2; i >= 0; i--) {
-            FKPosition fk = wayList.get(i);
-            //向上
-            if (this.y / Config.SIZE > fk.getY()) {
-                this.direction=Direction.UP;
-                break;
-            }
-
-            //向下
-            if (this.y / Config.SIZE < fk.getY()) {
-                this.direction=Direction.DOWN;
-                break;
-            }
-
-            //向左
-            if (this.x / Config.SIZE > fk.getX()) {
-                this.direction=Direction.LEFT;
-                break;
-            }
-
-            //向右
-            if (this.x / Config.SIZE < fk.getX()) {
-                this.direction=Direction.RIGH;
-                break;
-            }
-
+        FKPosition fk = wayList.get(i);
+        //向上
+        if (this.y / Config.SIZE > fk.getY()) {
+            return Direction.UP;
         }
+
+        //向下
+        if (this.y / Config.SIZE < fk.getY()) {
+            return Direction.DOWN;
+        }
+
+        //向左
+        if (this.x / Config.SIZE > fk.getX()) {
+            return Direction.LEFT;
+        }
+
+        //向右
+        if (this.x / Config.SIZE < fk.getX()) {
+            return Direction.RIGH;
+        }
+        return Direction.UP;
     }
 
     public void draw() {
@@ -172,5 +139,63 @@ public class EnemyTank extends TankFactory {
     @Override
     public String toString() {
         return "EnemyTank{}";
+    }
+
+    public void move(Direction direction) {
+        //为了提高效率,当成员方向this.direction跟按键方向direction不一致才赋值,其实这个时候就是调转方向的时候
+        if (this.direction != direction) {
+            this.direction = direction;
+            return;
+        }
+        if (this.badDirection != null && this.badDirection == direction) {
+            //检测到碰撞，不能继续往前走
+            return;
+        }
+
+        if (this.badDirection2 != null && this.badDirection2 == direction) {
+            //检测到碰撞，不能继续往前走
+            return;
+        }
+        //根据坦克不同的方向做不同坐标改变
+        switch (direction) {//坐标改变的逻辑
+            case UP:
+                y -= speed;//y = y-32;
+                break;
+
+            case DOWN:
+                y += speed;
+                break;
+
+            case LEFT:
+                x -= speed;
+                break;
+
+            case RIGH:
+                x += speed;
+                break;
+
+            default:
+                break;
+        }
+
+        //坦克移动了,问题一:坦克可以超出屏幕范围,如果超过某个范围,我就让它等于那个范围,它就定在哪里,不能越界了,坦克要移动调用坦克move方法,在move方法里面做限制
+        //越界处理,如果超过某个范围,我就让它等于那个范围,它就定在哪里,
+        if (x <= 0) {
+            x = 0;
+        }
+
+        if (y <= 0) {
+            y = 0;
+        }
+
+        if (x >= Config.WIDTH - Config.SIZE) {
+            x = Config.WIDTH - Config.SIZE;
+        }
+
+        if (y >= Config.HEIGHT - Config.SIZE) {
+            y = Config.HEIGHT - Config.SIZE;
+        }
+
+
     }
 }

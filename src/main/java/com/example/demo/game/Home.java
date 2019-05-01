@@ -4,7 +4,7 @@ import com.example.demo.util.DrawUtils;
 
 import java.io.IOException;
 
-public class Home extends Pictrue{
+public class Home extends Pictrue {
     public Home(int x,int y){//x = 0,y = 64;
         super(x, y);
         try {

@@ -4,7 +4,7 @@ import com.example.demo.util.DrawUtils;
 
 import java.io.IOException;
 
-public class Weapon extends Pictrue{
+public class Weapon extends Pictrue {
     public Weapon(int x, int y) {
         super(x, y);
         try {

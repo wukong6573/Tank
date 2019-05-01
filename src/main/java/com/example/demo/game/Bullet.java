@@ -31,7 +31,7 @@ public abstract class Bullet {
 		//子弹宽高
 		//工具类绘制
 		try {
-			int[] size = DrawUtils.getSize(Bullet.class.getResource("/res/img/bullet_u.gif").getPath());
+			int[] size = DrawUtils.getSize(com.example.demo.game.Bullet.class.getResource("/res/img/bullet_u.gif").getPath());
 			this.width = size[0];
 			this.height = size[1];
 		} catch (IOException e) {
@@ -82,7 +82,7 @@ public abstract class Bullet {
 			//想绘制画一张坦克图片在我游戏窗体上,很简单,调用我绘制工具类DrawUtils.draw(图片路径,图片坐标);
 			try {
 //				DrawUtils.draw(GetPath.PATH+"\\img\\bullet_u.gif", x, y);//0,0
-				DrawUtils.draw(Bullet.class.getResource("/res/img/bullet_u.gif").getPath(), x, y);//0,0
+				DrawUtils.draw(com.example.demo.game.Bullet.class.getResource("/res/img/bullet_u.gif").getPath(), x, y);//0,0
 			} catch (IOException e) {
 				// TODO 自动生成的 catch 块
 				e.printStackTrace();
@@ -94,7 +94,7 @@ public abstract class Bullet {
 			//想绘制画一张坦克图片在我游戏窗体上,很简单,调用我绘制工具类DrawUtils.draw(图片路径,图片坐标);
 			try {
 //				DrawUtils.draw(GetPath.PATH+"\\img\\bullet_d.gif", x, y);//0,0
-				DrawUtils.draw(Bullet.class.getResource("/res/img/bullet_d.gif").getPath(), x, y);//0,0
+				DrawUtils.draw(com.example.demo.game.Bullet.class.getResource("/res/img/bullet_d.gif").getPath(), x, y);//0,0
 			} catch (IOException e) {
 				// TODO 自动生成的 catch 块
 				e.printStackTrace();
@@ -106,7 +106,7 @@ public abstract class Bullet {
 			
 			//想绘制画一张坦克图片在我游戏窗体上,很简单,调用我绘制工具类DrawUtils.draw(图片路径,图片坐标);
 			try {
-				DrawUtils.draw(Bullet.class.getResource("/res/img/bullet_l.gif").getPath(), x, y);//0,0
+				DrawUtils.draw(com.example.demo.game.Bullet.class.getResource("/res/img/bullet_l.gif").getPath(), x, y);//0,0
 			} catch (IOException e) {
 				// TODO 自动生成的 catch 块
 				e.printStackTrace();
@@ -118,7 +118,7 @@ public abstract class Bullet {
 			
 			//想绘制画一张坦克图片在我游戏窗体上,很简单,调用我绘制工具类DrawUtils.draw(图片路径,图片坐标);
 			try {
-				DrawUtils.draw(Bullet.class.getResource("/res/img/bullet_r.gif").getPath(), x, y);//0,0
+				DrawUtils.draw(com.example.demo.game.Bullet.class.getResource("/res/img/bullet_r.gif").getPath(), x, y);//0,0
 			} catch (IOException e) {
 				// TODO 自动生成的 catch 块
 				e.printStackTrace();
@@ -133,7 +133,7 @@ public abstract class Bullet {
 	//你作为一个子弹对象,应该具有一个判断自己是否超过屏幕范围的方法1,如果是返回true,在不断刷新方法里面遍历子弹集合拿到每一个子弹类对象调用方法1如果返回true,就从集合里面移除
 	//判断自己是否超过屏幕范围的方法1,如果是返回true,
 	public boolean isDestroyed(){//如何调用呢,只要拿到对象名可以调用了,不断刷新方法里面遍历子弹集合拿到每一个子弹类对象
-		if (x<=0||y<=0||x>=Config.WIDTH||y>=Config.HEIGHT) {
+		if (x<=0||y<=0||x>= Config.WIDTH||y>= Config.HEIGHT) {
 			return true;
 		}
 		return false;

@@ -24,8 +24,7 @@ public class GameWindow extends Window {
 
     private CopyOnWriteArrayList<Pictrue> list = new CopyOnWriteArrayList<>();//图片集合list
     public static ArrayList<FKPosition> zhangaiList = new ArrayList<>();
-    public static ArrayList<FKPosition> openList = new ArrayList<>();
-    public static ArrayList<FKPosition> closedList = new ArrayList<>();
+
     //    private CopyOnWriteArrayList<Pictrue> list2 = new CopyOnWriteArrayList<>();//图片集合list
     private CopyOnWriteArrayList<TankFactory> tanks = new CopyOnWriteArrayList<>();//爆炸物集合list
 
@@ -54,9 +53,9 @@ public class GameWindow extends Window {
             list.add(grass);
 //            list.add(steel);
             list.add(wall);
-            zhangaiList.add(new FKPosition(wall.x/Config.SIZE,wall.y/Config.SIZE));
-            zhangaiList.add(new FKPosition(water.x/Config.SIZE,water.y/Config.SIZE));
-            zhangaiList.add(new FKPosition(grass.x/Config.SIZE,grass.y/Config.SIZE));
+            zhangaiList.add(new FKPosition(wall.x / Config.SIZE, wall.y / Config.SIZE));
+            zhangaiList.add(new FKPosition(water.x / Config.SIZE, water.y / Config.SIZE));
+            zhangaiList.add(new FKPosition(grass.x / Config.SIZE, grass.y / Config.SIZE));
         }
         list.add(home);
         list.add(weapon);
@@ -68,7 +67,6 @@ public class GameWindow extends Window {
 
         //结果对象
         result = new Result();
-
     }
 
 
@@ -233,17 +231,18 @@ public class GameWindow extends Window {
 
         for (TankFactory tankFactory : tanks) {
             tankFactory.draw();
+
+        }
+        //AI坦克方向,并发射子弹
+        Bullet bu = enemyTank.getDirection(tank).shot();
+        if (bu != null) {
+            blist.add(bu);
         }
 
         for (Pictrue p : list) {
             p.draw();
         }
 
-        //AI坦克方向,并发射子弹
-        Bullet bu = enemyTank.getDirection(tank).shot();
-        if (bu != null) {
-            blist.add(bu);
-        }
 
         for (TankFactory tank1 : tanks) {
             for (TankFactory tank2 : tanks) {

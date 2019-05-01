@@ -12,7 +12,7 @@ import java.io.IOException;
  * //以后,把坦克图片,坦克类,坦克对象都看成同一个东西理解
  */
 @Data
-public class Tank2 extends TankFactory{
+public class Tank2 extends TankFactory {
     Boolean shotWall = false;
 
     public Tank2(int x, int y) {
@@ -79,6 +79,7 @@ public class Tank2 extends TankFactory{
         Bullet bullet = new BulletOfTank2(this);//bullet;this坦克类对象名,this谁来调用我我就代表谁,this = tank对象名
         return bullet;
     }
+
 
     @Override
     public String toString() {

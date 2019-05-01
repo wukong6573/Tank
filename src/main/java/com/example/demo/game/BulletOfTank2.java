@@ -2,7 +2,7 @@ package com.example.demo.game;
 
 import com.example.demo.util.CollsionUtils;
 
-public class BulletOfTank2 extends Bullet{
+public class BulletOfTank2 extends Bullet {
     public BulletOfTank2(TankFactory tank) {
         super(tank);
     }
