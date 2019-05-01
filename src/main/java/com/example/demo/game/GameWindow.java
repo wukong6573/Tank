@@ -39,12 +39,14 @@ public class GameWindow extends Window {
 
         tank = new Tank(64 * 8, 0);//坦克对象名tank, 作为自动寻路的终点
 
-        tank2 = new Tank2(64 * 10, 0);  //第二辆坦克
+//        tank2 = new Tank2(64 * 10, 0);  //第二辆坦克
+        tank2 = new Tank2(Config.WIDTH / 2, Config.HEIGHT - 64);  //第二辆坦克
         enemyTank = new EnemyTank(64 * 10, 64 * 7);  // 自动寻路的起点
         home = new Home(Config.WIDTH / 2, Config.HEIGHT - 64);
         weapon = new Weapon(Config.WIDTH / 2, Config.HEIGHT - 64 * 3);
 
-        for (int i = 1; i < 12; i++) {//0-17
+        for (int i = 1; i < 11; i++) {//0-17
+
             Wall wall = new Wall(Config.SIZE * i, Config.SIZE * 1);
             Water water = new Water(Config.SIZE * i, Config.SIZE * 3);
             Grass grass = new Grass(Config.SIZE * i, Config.SIZE * 5);

@@ -33,7 +33,7 @@ public class Water extends Pictrue {
 	public void draw(){
 		//想绘制画一张坦克图片在我游戏窗体上,很简单,调用我绘制工具类DrawUtils.draw(图片路径,图片坐标);
 		try {
-			DrawUtils.draw(Bullet.class.getResource("/res/img/water.gif").getPath(), x, y);//0,64
+			DrawUtils.draw(Bullet.class.getResource("/res/img/wei.png").getPath(), x, y);//0,64
 		} catch (IOException e) {
 			// TODO 自动生成的 catch 块
 			e.printStackTrace();
