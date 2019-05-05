@@ -134,7 +134,7 @@ public abstract class Bullet {
 	//你作为一个子弹对象,应该具有一个判断自己是否超过屏幕范围的方法1,如果是返回true,在不断刷新方法里面遍历子弹集合拿到每一个子弹类对象调用方法1如果返回true,就从集合里面移除
 	//判断自己是否超过屏幕范围的方法1,如果是返回true,
 	public boolean isDestroyed(){//如何调用呢,只要拿到对象名可以调用了,不断刷新方法里面遍历子弹集合拿到每一个子弹类对象
-		if (x<=0||y<=0||x>= Config.WIDTH||y>= Config.HEIGHT) {
+		if (x<0||y<0||x> Config.WIDTH||y> Config.HEIGHT) {
 			return true;
 		}
 		return false;
@@ -158,27 +158,27 @@ public abstract class Bullet {
 		int y2 = this.y;
 		int w2 = this.width;
 		int h2 = this.height;
-
-		switch (this.direction) {//坐标改变的逻辑
-			case UP:
-				y2 -= 32;
-				break;
-
-			case DOWN:
-				y2 += 32;
-				break;
-
-			case LEFT:
-				x2 -= 32;
-				break;
-
-			case RIGH:
-				x2 += 32;
-				break;
-
-			default:
-				break;
-		}
+//
+//		switch (this.direction) {//坐标改变的逻辑
+//			case UP:
+//				y2 -= 32;
+//				break;
+//
+//			case DOWN:
+//				y2 += 32;
+//				break;
+//
+//			case LEFT:
+//				x2 -= 32;
+//				break;
+//
+//			case RIGH:
+//				x2 += 32;
+//				break;
+//
+//			default:
+//				break;
+//		}
 		boolean flag = CollsionUtils.isCollsionWithRect(x1, y1, w1, h1, x2, y2, w2, h2);//true
 		return flag;
 	}

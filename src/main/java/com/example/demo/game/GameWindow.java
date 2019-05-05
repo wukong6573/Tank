@@ -194,6 +194,7 @@ public class GameWindow extends Window {
 
                     //子弹碰到图片,就让他 爆炸
                     if (bullet.checkHit(p)) {
+                        System.out.println("碰到图片了");
                         //如果图片是增益buff,不会被子弹打掉
                         if (p instanceof Weapon) {
                             //武器buff对子弹免疫
