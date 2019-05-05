@@ -65,8 +65,9 @@ public class GameWindow extends Window {
 
         tanks.add(tank);
         tanks.add(tank2);
-        //把坦克2也当做 障碍物
-//        zhangaiList.add(new FKPosition(tank2.x/Config.SIZE,tank2.y/Config.SIZE));
+        //tank子弹 追踪tank2，enemyTank也要变成障碍物
+        zhangaiList.add(new FKPosition(enemyTank.x/Config.SIZE,enemyTank.y/Config.SIZE));
+//        zhangaiList.add(new FKPosition(tank.x/Config.SIZE,tank.y/Config.SIZE));
         tanks.add(enemyTank);
 
         //结果对象
@@ -183,11 +184,13 @@ public class GameWindow extends Window {
                 for (Bullet bullet : blist) {
                     //如果子弹碰到坦克
                     if (bullet.checkHit(tank)) {
+                        System.out.println("子弹碰到坦克");
                         bullet.boom().draw();
                         blist.remove(bullet);
                     }
                     //如果子弹销毁
                     if (bullet.isDestroyed()) {
+                        System.out.println("子弹销毁");
                         bullet.boom().draw();
                         blist.remove(bullet);//超出范围,就从集合里面移除这个子弹对象,集合里面就没有这个子弹对象了,就不会把它绘制出来了
                     }
@@ -232,7 +235,7 @@ public class GameWindow extends Window {
 
         for (Bullet bullet : blist) {
             if(bullet instanceof BulletOfTank){
-                bullet.autoFindHim(tank2);
+                bullet.autoFindHim(tank2).draw();
             }else {
                 bullet.draw();
             }

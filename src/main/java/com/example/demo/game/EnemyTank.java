@@ -36,17 +36,17 @@ public class EnemyTank extends TankFactory {
 
         flag++;
         //每个方向进来,走两步再说
-//        if (flag > 10) {
-//            autoFindHim = new AutoFindHim();
-//            wayList = autoFindHim.getWayLine(this, tank);
-//            //第一个是终点坐标，倒数第一个方块是 起点坐标，倒数第二个是与起点相邻的路线方块
-//            i = wayList.size() - 2;
-//            flag = 0;
-//            Direction direction = this.tankMove(wayList);
-//            if (direction != null) {
-//                this.move(direction);
-//            }
-//        }
+        if (flag > 10) {
+            autoFindHim = new AutoFindHim();
+            wayList = autoFindHim.getWayLine(this, tank);
+            //第一个是终点坐标，倒数第一个方块是 起点坐标，倒数第二个是与起点相邻的路线方块
+            i = wayList.size() - 2;
+            flag = 0;
+            Direction direction = this.tankMove(wayList);
+            if (direction != null) {
+                this.move(direction);
+            }
+        }
         return this;
     }
 

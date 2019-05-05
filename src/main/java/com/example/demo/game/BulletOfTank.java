@@ -13,7 +13,7 @@ public class BulletOfTank extends Bullet {
         //子弹宽高
         //工具类绘制
         try {
-            int[] size = DrawUtils.getSize(com.example.demo.game.Bullet.class.getResource("/res/img/water.gif").getPath());
+            int[] size = DrawUtils.getSize(com.example.demo.game.Bullet.class.getResource("/res/img/pq.png").getPath());
             this.width = size[0];
             this.height = size[1];
         } catch (IOException e) {
@@ -37,13 +37,13 @@ public class BulletOfTank extends Bullet {
                 break;
 
             case LEFT:
-                this.x = tank.x-Config.SIZE*2;
+                this.x = tank.x-Config.SIZE;
                 this.y = tank.y;
                 break;
 
             case RIGH:
                 System.out.println("坦克x:"+tank.x);
-                this.x = tank.x+Config.SIZE*2;
+                this.x = tank.x+Config.SIZE;
                 this.y = tank.y;
                 System.out.println("子弹x:"+this.x);
                 break;
@@ -89,10 +89,11 @@ public class BulletOfTank extends Bullet {
         return flag;
     }
 
-    public void autoFindHim(Tank2 tank2) {
+    public Bullet autoFindHim(Tank2 tank2) {
         AutoFindHim autoFindHim=new AutoFindHim();
         List<FKPosition> wayList = autoFindHim.getWayLine(this, tank2);
         this.takeMove(wayList);
+        return this;
     }
 
     private void takeMove(List<FKPosition> wayList) {
@@ -128,32 +129,24 @@ public class BulletOfTank extends Bullet {
         if (this.x / Config.SIZE < fk.getX()) {
             this.direction=Direction.RIGH;
         }
-        this.draw();
     }
 
     public void draw(){//被不断调用!!!画不断画
-        //应该在子弹类draw方法要根据不同的子弹方向绘制不同的子弹图片,关键子弹方向来自坦克方向,已经拿到了,在子弹类构造方法里面已经拿到,如何在draw方法使用,定义成员变量接收坦克方向
-        //成员变量可以在类不同方法里面使用,定义在方法外,所以我在方法内里面可以使用
         switch (this.direction) {//坐标改变的逻辑,子弹方向
             case UP:
-                //让子弹飞:在子弹类draw方法里面根据不同的方向做不同坐标的改变因为draw方法会不断调用坐标就不断改变就造成飞的效果不必要再写一个飞的方法
-                y-=speed;//y = y-8;
 
-                //想绘制画一张坦克图片在我游戏窗体上,很简单,调用我绘制工具类DrawUtils.draw(图片路径,图片坐标);
                 try {
-                    DrawUtils.draw(com.example.demo.game.Bullet.class.getResource("/res/img/water.gif").getPath(), x, y);//0,0
+                    DrawUtils.draw(com.example.demo.game.Bullet.class.getResource("/res/img/pq.png").getPath(), x, y);//0,0
+                    y -= speed;//y = y-8;
                 } catch (IOException e) {
-                    // TODO 自动生成的 catch 块
                     e.printStackTrace();
                 }//画图要不断绘
                 break;
 
             case DOWN:
-                y+=speed;
-                //想绘制画一张坦克图片在我游戏窗体上,很简单,调用我绘制工具类DrawUtils.draw(图片路径,图片坐标);
                 try {
-//				DrawUtils.draw(GetPath.PATH+"\\img\\bullet_d.gif", x, y);//0,0
-                    DrawUtils.draw(com.example.demo.game.Bullet.class.getResource("/res/img/water.gif").getPath(), x, y);//0,0
+                    DrawUtils.draw(com.example.demo.game.Bullet.class.getResource("/res/img/pq.png").getPath(), x, y);//0,0
+                    y += speed;
                 } catch (IOException e) {
                     // TODO 自动生成的 catch 块
                     e.printStackTrace();
@@ -161,11 +154,9 @@ public class BulletOfTank extends Bullet {
                 break;
 
             case LEFT:
-                x-=speed;
-
-                //想绘制画一张坦克图片在我游戏窗体上,很简单,调用我绘制工具类DrawUtils.draw(图片路径,图片坐标);
                 try {
-                    DrawUtils.draw(com.example.demo.game.Bullet.class.getResource("/res/img/water.gif").getPath(), x, y);//0,0
+                    DrawUtils.draw(com.example.demo.game.Bullet.class.getResource("/res/img/pq.png").getPath(), x, y);//0,0
+                    x -= speed;
                 } catch (IOException e) {
                     // TODO 自动生成的 catch 块
                     e.printStackTrace();
@@ -173,11 +164,9 @@ public class BulletOfTank extends Bullet {
                 break;
 
             case RIGH:
-                x+=speed;
-
-                //想绘制画一张坦克图片在我游戏窗体上,很简单,调用我绘制工具类DrawUtils.draw(图片路径,图片坐标);
                 try {
-                    DrawUtils.draw(com.example.demo.game.Bullet.class.getResource("/res/img/water.gif").getPath(), x, y);//0,0
+                    DrawUtils.draw(com.example.demo.game.Bullet.class.getResource("/res/img/pq.png").getPath(), x, y);//0,0
+                    x += speed;
                 } catch (IOException e) {
                     // TODO 自动生成的 catch 块
                     e.printStackTrace();
