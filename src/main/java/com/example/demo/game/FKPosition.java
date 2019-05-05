@@ -40,6 +40,11 @@ public class FKPosition {
         this.y = tankFactory.y/ Config.SIZE;
     }
 
+    public FKPosition(BulletOfTank bulletOfTank){
+        this.x = bulletOfTank.x/ Config.SIZE;
+        this.y = bulletOfTank.y/ Config.SIZE;
+    }
+
     static public final int size = 50;//一个方块单位为50像素
     private int x;//x方向的方块单位（即x方向像素/size）
     private int y;//y方向的方块单位（即y方向像素/size）

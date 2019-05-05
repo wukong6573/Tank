@@ -65,6 +65,8 @@ public class GameWindow extends Window {
 
         tanks.add(tank);
         tanks.add(tank2);
+        //把坦克2也当做 障碍物
+//        zhangaiList.add(new FKPosition(tank2.x/Config.SIZE,tank2.y/Config.SIZE));
         tanks.add(enemyTank);
 
         //结果对象
@@ -228,7 +230,11 @@ public class GameWindow extends Window {
 
 
         for (Bullet bullet : blist) {
-            bullet.draw();
+            if(bullet instanceof BulletOfTank){
+                bullet.autoFindHim(tank2);
+            }else {
+                bullet.draw();
+            }
         }
 
         for (TankFactory tankFactory : tanks) {

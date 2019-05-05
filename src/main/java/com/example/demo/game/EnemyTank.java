@@ -36,17 +36,17 @@ public class EnemyTank extends TankFactory {
 
         flag++;
         //每个方向进来,走两步再说
-        if (flag > 10) {
-            autoFindHim = new AutoFindHim();
-            wayList = autoFindHim.getWayLine(this, tank);
-            //第一个是终点坐标，倒数第一个方块是 起点坐标，倒数第二个是与起点相邻的路线方块
-            i = wayList.size() - 2;
-            flag = 0;
-            Direction direction = this.tankMove(wayList);
-            if (direction != null) {
-                this.move(direction);
-            }
-        }
+//        if (flag > 10) {
+//            autoFindHim = new AutoFindHim();
+//            wayList = autoFindHim.getWayLine(this, tank);
+//            //第一个是终点坐标，倒数第一个方块是 起点坐标，倒数第二个是与起点相邻的路线方块
+//            i = wayList.size() - 2;
+//            flag = 0;
+//            Direction direction = this.tankMove(wayList);
+//            if (direction != null) {
+//                this.move(direction);
+//            }
+//        }
         return this;
     }
 
@@ -54,11 +54,10 @@ public class EnemyTank extends TankFactory {
     private Direction tankMove(List<FKPosition> wayList) {
         if (i == 0) {
             System.out.println("到达终点");
-            return null;
         }
         if (wayList == null || wayList.size() == 0) {
             System.out.println("无法 到达终点 ！");
-            return Direction.UP;
+            return null;
         }
         FKPosition fk = wayList.get(i);
         //向上
@@ -80,7 +79,7 @@ public class EnemyTank extends TankFactory {
         if (this.x / Config.SIZE < fk.getX()) {
             return Direction.RIGH;
         }
-        return Direction.UP;
+        return null;
     }
 
     public void draw() {

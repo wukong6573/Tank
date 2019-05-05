@@ -4,6 +4,7 @@ import com.example.demo.util.CollsionUtils;
 import com.example.demo.util.DrawUtils;
 
 import java.io.IOException;
+import java.util.List;
 
 /**
  * @author dell
@@ -181,4 +182,8 @@ public abstract class Bullet {
 		boolean flag = CollsionUtils.isCollsionWithRect(x1, y1, w1, h1, x2, y2, w2, h2);//true
 		return flag;
 	}
+
+	public void autoFindHim(Tank2 tank2) {
+	}
+
 }
