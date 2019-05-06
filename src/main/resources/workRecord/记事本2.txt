@@ -1,0 +1,172 @@
+﻿1.gitblit的使用
+上传：git push [remote] [branch] 
+克隆：git clone
+
+本机ip: 192.168.1.25
+
+周报传输:   ftp://192.168.1.123/
+用户名:ftpadmin
+密码:ysb123456
+
+小程序码的密钥:
+AppId:  wx8361ba5c8fd9a420
+AppSecret:   104d7e1a30e570f3da6ab3f18f538147(也叫做key)
+
+
+实名认证博客:
+https://blog.csdn.net/fannie_yang/article/details/80311700
+AppKey：23753953
+AppSecret：c29d0c42ddb17877afade2ac4d275adb
+AppCode：785ddf50eea34991956c58f8e2e5f50e
+
+支付的:
+商户号: 1521446821
+商户号密钥: Ybsxb20150701passwrodWx123456789
+
+
+打开远程命令: mstsc  
+123密码:www.163.com
+
+苏教版二年级上学期
+
+某一个模块的application.yml配置:
+1.自身的端口号和模块名称
+2.与注册中心eureka-service的连接配置
+3.加载mabatis的mapper映射文件
+4.安全框架配置oauth2   -----这块不太理解
+5.分页插件的配置
+6.hystrix熔断机制  -------不太理解
+7.日志打印级别配置
+8.数据库相关配置
+
+
+云书包/学霸神器 可用账户:
+17688888888
+ysb123456
+
+常出现的bug:
+1.String body ="" ,原因是 oauth认证类出现异常,没有查到相关数据
+
+2.数据库的datetime格式字段,实体类可以不用转换格式,直接 String birthday 即可展示页面
+
+3.返回对象里边,注意属性和字段不一致,造成的返回数据为null的异常
+
+4.mybatis映射文件中,IFNULL函数没有提示,但是可以生效
+
+5.mysql的select 中有index字段,需要加上别名，或者加符号 `index`进行转义,否则会报错
+
+
+6.随机数相关：
+r.nextInt (201) ; // 这个是0 - 200
+
+7.mybatis懒加载配置
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+  configuration:
+    lazy-loading-enabled: true
+       //按需加载,填写false
+    aggressive-lazy-loading: false
+
+这样就实现了全局懒加载，若个别需要关闭，可用 fetchType=“eager”,
+
+<resultMap>
+<collection property="" fetchType="eager"/>
+</resultMap>
+
+8.判断是否为奇数:
+if( (num & 1) !=0 ) , true代表是奇数,false代表为偶数
+解析:
+把num和 1,转化成二进制,两个数只要有一个为1则为1，否则就为0
+  110  和 100 ,最后结果是 101 ,所以 110 & 100=101 (二进制)
+  1 的二进制是1本身,任意正整数num 变成二进制后,和 1比较, 1 & 1 = 1,说明num是奇数,0 & 1=0 ,说明num是偶数
+
+9.前端后台传递数据类型不一致:
+异常:  Can not deserialize instance of java.lang.String out of START_OBJECT token
+
+10.Dao层的  void updateErrorBookState(List<String> exists),  List<String>作为参数的mapper写法:
+<foreach collection="list" item="exists" open="(" separator="," close=")">
+            #{exists}
+        </foreach>
+11.Mybatis Mapper.xml 需要查询返回List<String>
+<select id="getByIds"  parameterType="java.lang.String"  resultType="java.util.List">
+
+12.Illegal mix of collations (utf8mb4_unicode_ci,IMPLICIT) and (utf8mb4_general_ci,IMPLICIT) for operation ‘=’
+在使用的varchar 类型字段中添加字符排序方式：select * from user where mobile = in_mobile COLLATE utf8_unicode_ci;
+
+13.修改某一字段的字符集
+  ALTER TABLE t_xxl_answer CHANGE 字段名 字段名 VARCHAR(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci
+
+14. 解决mybatis 不能使用< 符号的问题:
+<![CDATA[<if test="parameter.containsKey('sendAreaName')" >
+            and a.send_area_name <#{sendAreaName} 
+        </if>]]>
+
+15.学霸神器 本模块操作一次表A,调用其他模块,重复对同一张表 进行操作,会夏继巴报异常....例如,hystrix....time out and no fallback...
+
+16.java链式开发,注解配合起来用:
+
+import lombok.Data;
+
+@Data
+@Accessors(chain = true)
+public class Student{
+    int age;
+    String name;
+}
+即可实现,实体对象可通过链式set方式给属性注入值
+
+17.springboot 的@datetimeformat 不起作用问题
+@DateTimeFormat(pattern = "yyyy年MM月dd日 HH:mm:ss")
+@JsonFormat(pattern = "yyyy年MM月dd日 HH:mm:ss",timezone = "GMT+8")
+private Date createDate;
+
+18. 注意:用Arrays.asList( )方法,添加的集合,不支持 list.remove( )操作.
+
+19.小布尔类型boolean,字段名如果是is开头,例如 isPay,返回给前端的就是pay,后台给boolean设置值,也是setPay(true),而不是setIsPay;
+    大Boolean类型,字段名叫啥,就返回啥,设置值也跟其字段名保持一致
+
+20.调用第三方接口的通用代码:
+ //获取运单数据
+        StringBuffer url = new StringBuffer("https://api.weixin.qq.com/cgi-bin/express/business/order/get?access_token=ACCESS_TOKEN");
+        String accessToken = TokenUtil.getAccess_token();
+        url.append(accessToken);//设置accessToken
+        JSONObject json = new JSONObject();
+        json.put("order_id", transportInfoVo.getOid());//设置openid
+        json.put("openid", transportInfoVo.getOpenid());
+        json.put("delivery_id", "SF");
+        json.put("waybill_id",transportInfoVo.getWaybillId());//设置模板id
+        Map<String, Object> map = null;
+        try {
+            HttpClient client = HttpClientBuilder.create().build();//构建一个Client
+            HttpPost post = new HttpPost(url.toString());//构建一个POST请求
+            StringEntity s = new StringEntity(json.toString(), "UTF-8");
+            s.setContentEncoding("UTF-8");
+            s.setContentType("application/json; charset=UTF-8");
+            post.setEntity(s);//设置编码，不然模板内容会乱码
+            HttpResponse response = client.execute(post);//提交POST请求
+            HttpEntity result = response.getEntity();//拿到返回的HttpResponse的"实体"
+            String content = EntityUtils.toString(result);
+            JSONObject res = JSONObject.fromObject(content);//转为json格式
+            //把信息封装到map
+//            map = (Map<String, Object>) JSONObject.toBean(res);
+            if (res != null && "ok".equals(res.get("errMsg"))) {
+                System.out.println("运单消息查询成功");
+            } else {
+                //封装一个异常
+                StringBuilder sb = new StringBuilder("运单消息查询失败\n");
+                sb.append(res.toString());
+                throw new Exception(sb.toString());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+21.
+
+
+
+
+
+
+
+

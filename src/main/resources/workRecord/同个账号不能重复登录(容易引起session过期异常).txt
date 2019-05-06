@@ -1,0 +1,158 @@
+﻿Controller:
+/* 
+     * 可判断用户是否重复登录 
+     */  
+    public String reLogin() {  
+        String userId = this.getTxtUser();//ServletActionContext.getRequest().getParameter("txtUser");  
+        UserInfo user = new UserInfo();  
+        user.setUserId(userId);  
+        //验证该用户ID，是否已经登录。当前用户比较已登录到系统的静态变量中的值，是否存在。  
+        Boolean hasLogin = SessionUserListener.checkIfHasLogin(user);  
+        // 如果重复登录，控制端则打印信息，返回登录页面  
+        if (hasLogin) {  
+            System.out.println(user.getUserId()+"已经登录到本系统。");  
+            return "input";  
+            // SessionUserListener.removeUserSession(userId);  
+        } else {  
+            // 如果没有重复登录，则将该登录的用户信息添加入session中  
+            ServletActionContext.getRequest().getSession().setAttribute("userInfo", user);  
+            // 比较保存所有用户session的静态变量中，是否含有当前session的键值映射，如果含有就删除  
+            if (SessionUserListener.containsKey(ServletActionContext.getRequest().getSession().getId())) {  
+                SessionUserListener.removeSession(ServletActionContext.getRequest().getSession().getId());  
+            }  
+            //把当前用户封装的session按，sessionID和session进行键值封装，添加到静态变量map中。  
+            SessionUserListener.addUserSession(ServletActionContext.getRequest().getSession());  
+        }  
+        return "success";  
+    }  
+
+
+
+session监听类:
+import java.util.ArrayList;  
+import java.util.HashMap;  
+import java.util.Iterator;  
+import java.util.List;  
+import java.util.Map;  
+  
+import javax.servlet.http.HttpSession;  
+import javax.servlet.http.HttpSessionEvent;  
+import javax.servlet.http.HttpSessionListener;  
+  
+import com.zyujie.pojo.UserInfo;  
+  
+public class SessionUserListener implements HttpSessionListener {  
+  
+    // key为sessionId，value为HttpSession，使用static，定义静态变量，使之程序运行时，一直存在内存中。  
+    private static java.util.Map<String, HttpSession> sessionMap = new java.util.concurrent.ConcurrentHashMap<String, HttpSession>(500);  
+  
+    /** 
+     * HttpSessionListener中的方法，在创建session 
+     */  
+    public void sessionCreated(HttpSessionEvent event) {  
+        // TODO Auto-generated method stub  
+    }  
+  
+    /** 
+     * HttpSessionListener中的方法，回收session时,删除sessionMap中对应的session 
+     */  
+    public void sessionDestroyed(HttpSessionEvent event) {  
+        getSessionMap().remove(event.getSession().getId());  
+    }  
+  
+    /** 
+     * 得到在线用户会话集合 
+     */  
+    public static List<HttpSession> getUserSessions() {  
+        List<HttpSession> list = new ArrayList<HttpSession>();  
+        Iterator<String> iterator = getSessionMapKeySetIt();  
+        while (iterator.hasNext()) {  
+            String key = iterator.next();  
+            HttpSession session = getSessionMap().get(key);  
+            list.add(session);  
+        }  
+        return list;  
+    }  
+  
+    /** 
+     * 得到用户对应会话map，key为用户ID,value为会话ID 
+     */  
+    public static Map<String, String> getUserSessionMap() {  
+        Map<String, String> map = new HashMap<String, String>();  
+        Iterator<String> iter = getSessionMapKeySetIt();  
+        while (iter.hasNext()) {  
+            String sessionId = iter.next();  
+            HttpSession session = getSessionMap().get(sessionId);  
+            UserInfo user = (UserInfo) session.getAttribute("userInfo");  
+            if (user != null) {  
+                map.put(user.getUserId(), sessionId);  
+            }  
+        }  
+        return map;  
+    }  
+  
+    /** 
+     * 移除用户Session 
+     */  
+    public synchronized static void removeUserSession(String userId) {  
+        Map<String, String> userSessionMap = getUserSessionMap();  
+        if (userSessionMap.containsKey(userId)) {  
+            String sessionId = userSessionMap.get(userId);  
+            getSessionMap().get(sessionId).invalidate();  
+            getSessionMap().remove(sessionId);  
+        }  
+    }  
+  
+    /** 
+     * 增加用户到session集合中 
+     */  
+    public static void addUserSession(HttpSession session) {  
+        getSessionMap().put(session.getId(), session);  
+    }  
+  
+    /** 
+     * 移除一个session 
+     */  
+    public static void removeSession(String sessionID) {  
+        getSessionMap().remove(sessionID);  
+    }  
+  
+    public static boolean containsKey(String key) {  
+        return getSessionMap().containsKey(key);  
+    }  
+  
+    /** 
+     * 判断该用户是否已重复登录，使用 
+     * 同步方法，只允许一个线程进入，才好验证是否重复登录 
+     * @param user 
+     * @return 
+     */  
+    public synchronized static boolean checkIfHasLogin(UserInfo user) {  
+        Iterator<String> iter = getSessionMapKeySetIt();  
+        while (iter.hasNext()) {  
+            String sessionId = iter.next();  
+            HttpSession session = getSessionMap().get(sessionId);  
+            UserInfo sessionuser = (UserInfo) session.getAttribute("userInfo");  
+            if (sessionuser != null) {  
+                if (sessionuser.getUserId().equals(user.getUserId())){  
+                    return true;  
+                }  
+            }  
+        }  
+        return false;  
+    }  
+  
+    /** 
+     * 获取在线的sessionMap 
+     */  
+    public static Map<String, HttpSession> getSessionMap() {  
+        return sessionMap;  
+    }  
+  
+    /** 
+     * 获取在线sessionMap中的SessionId 
+     */  
+    public static Iterator<String> getSessionMapKeySetIt() {  
+        return getSessionMap().keySet().iterator();  
+    }  
+}  

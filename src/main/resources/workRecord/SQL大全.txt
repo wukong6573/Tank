@@ -1,0 +1,104 @@
+﻿熟悉mysql函数的运用
+IFNULL（expr1,expr2）：
+假如expr1不为NULL，则 IFNULL() 的返回值为expr1; 否则其返回值为 expr2。
+
+NULLIF(expr1,expr2):
+如果expr1 = expr2 成立，那么返回值为NULL，否则返回值为expr1
+
+ISNULL(expr):
+如expr 为null，那么isnull() 的返回值为 1，否则返回值为 0。
+
+if函数:
+格式：IF(Condition,A,B)
+
+意义：当Condition为TRUE时，返回A；当Condition为FALSE时，返回B。
+
+1、说明：两张关联表，删除主表中已经在副表中没有的信息 (不能起别名,只能用表名)
+delete from table1 where not exists ( select * from table2 where table1.field1=table2.field1 )
+
+2、说明：选择在每一组b值相同的数据中对应的a最大的记录的所有信息(类似这样的用法可以用于论坛每月排行榜,每月热销产品分析,按科目成绩排名,等等.)
+select a,b,c from tablename ta where a=(select max(a) from tablename tb where tb.b=ta.b)
+
+3 分组查询 GROUP BY 和GROUP_CONCAT()函数示例：
+语句 :
+SELECT locus,GROUP_CONCAT(id) FROM info WHERE locus IN('AB086827','AF040764') GROUP BY locus;
+
+可以将逗号更换成其他符号，如：
+语句GROUP_CONCAT(distinct id ORDER BY id DESC SEPARATOR '_')
+
+4.同时有CONCAT函数将查询结果连成一个字符串，但是查询的字段中有null时则整个结果为null，如：
+SELECT CONCAT(id, ‘，’, name,age) AS con FROM info LIMIT 1;返回结果为
++----------+
+| con      |
++----------+
+| 1,BioCyc23 |
++----------+
+5.查询本周的数据
+WHERE  YEARWEEK(DATE_FORMAT(create_date,'%Y-%m-%d')) = YEARWEEK(NOW())  (周日~周一)
+查询本周的数据(二):
+(SELECT WEEK(DATE_ADD(NOW(),INTERVAL 6 DAY),2)) (周一~周日)
+
+6.NULL是个神奇的东西，表示空值，未知值，任何数与它加减乘除都返回NULL。
+
+7.COALESCE函数
+
+COALESCE(Expression1,Expression2,Expression3,……)：接受一系列的表达式或列，返回第一个非空的值。
+
+例如SELECT COALESCE(NULL,NULL,4,NULL,NULL,5)，那么返回4，如果里面的参数都为NULL，那么会报错。
+
+8.排行榜的SQL（一）(适合数据不重复的情况)：
+SELECT a1.Name, a1.Sales, COUNT(a2.sales) Sales_Rank FROM ranking  a1, ranking  a2
+
+WHERE a1.Sales < a2.Sales or (a1.Sales=a2.Sales and a1.Name = a2.Name)
+
+GROUP BY a1.Name, a1.Sales ORDER BY a1.Sales DESC, a1.Name DESC;
+重点是自己和自己比较，找出a1的Sales小于a2的Sales的数据 或者Name和Sales都相等的数据(a1里的全部数据去对比a2里的每一个数据）
+
+9.排行榜的SQL（二）：
+SELECT a.uid,a.score,@rownum :=@rownum + 1 AS rank FROM 
+(SELECT t.uid,MAX(t.score) score FROM t_stlx_record t GROUP BY t.uid ) a ,(SELECT @rownum := 0) r ORDER BY a.score DESC
+
+10.函数
+时期时间函数
+weekday(date)    
+返回日期date是星期几(0=星期一,1=星期二,……6= 星期天)。
+
+dayofmonth(date)    
+返回date是一月中的第几日(在1到31范围内)
+
+dayofyear(date)    
+返回date是一年中的第几日(在1到366范围内)
+
+dayname(date)    
+返回date是星期几(按英文名返回) ，例如 'thursday' 
+
+monthname(date)    
+返回date是几月(按英文名返回) ，例如 'february'
+
+quarter(date)    
+返回date是一年的第几个季度 ，例如 2 ，代表夏季
+
+11.生成当天随机时间的sql:
+UPDATE t_xxl_record SET create_date=DATE_ADD(NOW(),  INTERVAL  FLOOR(1 + (RAND() * 10800))   SECOND );
+
+12.查询本月数据
+ DATE_FORMAT(tof.create_date,'%Y-%m')=DATE_FORMAT(NOW(),'%Y-%m')
+
+13.mybatis 小于 比较符, 用这种方式:
+<![CDATA[ tmla.score < 60.00 ]]>
+
+14.当天的日期是多少?
+SELECT DATE(NOW())
+
+15.判断某一天是一年中的第几周
+SELECT WEEK(DATE_ADD('2018-12-31 13:42:38',INTERVAL 6 DAY),2)
+或者
+DATE_FORMAT(create_date,'%u')
+
+16.不能先order by 再group by  ,要 先group by 再 order by 
+
+
+
+
+
+
