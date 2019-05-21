@@ -105,7 +105,8 @@ public class AutoFindHim {
         for(int i = 0; i < closedList.size(); i++){
             //如果wayList<=0,说明还没有获取到第一个方块(终点)；如果wayList>0,说明已经获取到第一个方块(终点)，则不用再执行下一个if语句
             if(wayList.size() > 0){
-                if(closedList.get(i).equals(wayList.get(wayList.size() - 1).getPreviousFK())){
+                FKPosition previousFK = wayList.get(wayList.size() - 1).getPreviousFK();
+                if( previousFK !=null && closedList.get(i).equals(previousFK)){
                     wayList.add(closedList.get(i));
                     //如果获取到的方块是起点，则跳出for循环
                     if(closedList.get(i).equals(beginFk)){

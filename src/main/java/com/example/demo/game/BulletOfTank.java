@@ -65,26 +65,6 @@ public class BulletOfTank extends Bullet {
         int w2 = this.width;
         int h2 = this.height;
 
-//        switch (this.direction) {//坐标改变的逻辑
-//            case UP:
-//                y2 -= 32;
-//                break;
-//
-//            case DOWN:
-//                y2 += 32;
-//                break;
-//
-//            case LEFT:
-//                x2 -= 32;
-//                break;
-//
-//            case RIGH:
-//                x2 += 32;
-//                break;
-//
-//            default:
-//                break;
-//        }
         boolean flag = CollsionUtils.isCollsionWithRect(x1, y1, w1, h1, x2, y2, w2, h2);//true
         return flag;
     }
@@ -137,7 +117,6 @@ public class BulletOfTank extends Bullet {
 
                 try {
                     DrawUtils.draw(com.example.demo.game.Bullet.class.getResource("/res/img/pq.png").getPath(), x, y);//0,0
-                    y -= speed;//y = y-8;
                 } catch (IOException e) {
                     e.printStackTrace();
                 }//画图要不断绘
@@ -146,7 +125,6 @@ public class BulletOfTank extends Bullet {
             case DOWN:
                 try {
                     DrawUtils.draw(com.example.demo.game.Bullet.class.getResource("/res/img/pq.png").getPath(), x, y);//0,0
-                    y += speed;
                 } catch (IOException e) {
                     // TODO 自动生成的 catch 块
                     e.printStackTrace();
@@ -156,7 +134,6 @@ public class BulletOfTank extends Bullet {
             case LEFT:
                 try {
                     DrawUtils.draw(com.example.demo.game.Bullet.class.getResource("/res/img/pq.png").getPath(), x, y);//0,0
-                    x -= speed;
                 } catch (IOException e) {
                     // TODO 自动生成的 catch 块
                     e.printStackTrace();
@@ -166,7 +143,6 @@ public class BulletOfTank extends Bullet {
             case RIGH:
                 try {
                     DrawUtils.draw(com.example.demo.game.Bullet.class.getResource("/res/img/pq.png").getPath(), x, y);//0,0
-                    x += speed;
                 } catch (IOException e) {
                     // TODO 自动生成的 catch 块
                     e.printStackTrace();
