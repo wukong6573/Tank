@@ -13,14 +13,7 @@ import java.math.BigDecimal;
  */
 public class GameTest{
 	public static void main(String[] args) {
-//		GameWindow gw = new GameWindow(Config.TITLE, Config.WIDTH, Config.HEIGHT, Config.FPS);
-////		gw.start();
-		XDocService service = new XDocService();
-		try {
-			service.to("C:\\Users\\unicho\\Desktop\\期末测试卷（A卷）.doc", new File("C:\\Users\\unicho\\Desktop\\test.pdf"));
-		PdfUtil.toImage("C:\\Users\\unicho\\Desktop\\test.pdf");
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		GameWindow gw = new GameWindow(Config.TITLE, Config.WIDTH, Config.HEIGHT, Config.FPS);
+		gw.start();
 	}
 }

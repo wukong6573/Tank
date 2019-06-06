@@ -23,7 +23,8 @@ public class GameWindow extends Window {
     private CopyOnWriteArrayList<Bullet> blist = new CopyOnWriteArrayList<>();//子弹类集合blist
 
     private CopyOnWriteArrayList<Pictrue> list = new CopyOnWriteArrayList<>();//图片集合list
-    public static ArrayList<FKPosition> zhangaiList = new ArrayList<>();
+    public static ArrayList<FKPosition> zhangaiList = new ArrayList<>();  //图片障碍物的集合
+    public static ArrayList<FKPosition> bulletOfTankZhangaiList = new ArrayList<>();  //图片障碍物的集合
 
     //    private CopyOnWriteArrayList<Pictrue> list2 = new CopyOnWriteArrayList<>();//图片集合list
     private CopyOnWriteArrayList<TankFactory> tanks = new CopyOnWriteArrayList<>();//爆炸物集合list
@@ -41,23 +42,27 @@ public class GameWindow extends Window {
 
 //        tank2 = new Tank2(64 * 10, 0);  //第二辆坦克
         tank2 = new Tank2(Config.WIDTH / 2, Config.HEIGHT - 64);  //第二辆坦克
-        enemyTank = new EnemyTank(64 * 10, 64 * 7);  // 自动寻路的起点
+//        enemyTank = new EnemyTank(64 * 10, 64 * 7);  // 自动寻路的起点
         home = new Home(Config.WIDTH / 2, Config.HEIGHT - 64);
         weapon = new Weapon(Config.WIDTH / 2, Config.HEIGHT - 64 * 3);
 
         for (int i = 1; i < 11; i++) {//0-17
-
             Wall wall = new Wall(Config.SIZE * i, Config.SIZE * 1);
             Water water = new Water(Config.SIZE * i, Config.SIZE * 3);
-            Grass grass = new Grass(Config.SIZE * i, Config.SIZE * 5);
+            Grass grass = null;
+            if (i != 6) {
+                grass = new Grass(Config.SIZE * i, Config.SIZE * 5);
+                list.add(grass);
+            }
 //            Steel steel = new Steel(Config.SIZE * i, Config.SIZE * 7);
             list.add(water);
-            list.add(grass);
 //            list.add(steel);
             list.add(wall);
             zhangaiList.add(new FKPosition(wall.x / Config.SIZE, wall.y / Config.SIZE));
             zhangaiList.add(new FKPosition(water.x / Config.SIZE, water.y / Config.SIZE));
-            zhangaiList.add(new FKPosition(grass.x / Config.SIZE, grass.y / Config.SIZE));
+            if (grass != null) {
+                zhangaiList.add(new FKPosition(grass.x / Config.SIZE, grass.y / Config.SIZE));
+            }
         }
         list.add(home);
         list.add(weapon);
@@ -66,9 +71,11 @@ public class GameWindow extends Window {
         tanks.add(tank);
         tanks.add(tank2);
         //tank子弹 追踪tank2，enemyTank也要变成障碍物
-        zhangaiList.add(new FKPosition(enemyTank.x/Config.SIZE,enemyTank.y/Config.SIZE));
+        bulletOfTankZhangaiList.addAll(zhangaiList);
+//        bulletOfTankZhangaiList.add(new FKPosition(tank.x/Config.SIZE,tank.y/Config.SIZE));
+//        bulletOfTankZhangaiList.add(new FKPosition(enemyTank.x / Config.SIZE, enemyTank.y / Config.SIZE));
 //        zhangaiList.add(new FKPosition(tank.x/Config.SIZE,tank.y/Config.SIZE));
-        tanks.add(enemyTank);
+//        tanks.add(enemyTank);
 
         //结果对象
         result = new Result();
@@ -173,7 +180,7 @@ public class GameWindow extends Window {
                         }
                         list.remove(p);
                     }
-//                //如果检测到碰撞，一定要跳出循环,不跟其他铁比较,为什么???
+                    //如果检测到碰撞，一定要跳出循环,否则就不能产生碰撞的效果了,,相当于此次检测碰撞无效,应该是这样
                     break;
                 }
             }
@@ -234,22 +241,24 @@ public class GameWindow extends Window {
 
 
         for (Bullet bullet : blist) {
-            if(bullet instanceof BulletOfTank){
+            if (bullet instanceof BulletOfTank) {
                 bullet.autoFindHim(tank2).draw();
-            }else {
+                if(bullet.isDestroyed()){
+                    System.out.println("真的还想再活500年");
+                }
+            } else {
                 bullet.draw();
             }
         }
 
         for (TankFactory tankFactory : tanks) {
             tankFactory.draw();
-
         }
         //AI坦克方向,并发射子弹
-        Bullet bu = enemyTank.getDirection(tank).shot();
-        if (bu != null) {
-            blist.add(bu);
-        }
+//        Bullet bu = enemyTank.getDirection(tank).shot();
+//        if (bu != null) {
+//            blist.add(bu);
+//        }
 
         for (Pictrue p : list) {
             p.draw();

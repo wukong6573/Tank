@@ -35,17 +35,22 @@ public class EnemyTank extends TankFactory {
     public com.example.demo.game.EnemyTank getDirection(Tank tank) {
 
         flag++;
-        //每个方向进来,走两步再说
+
         if (flag > 10) {
+          /*  //创建自动寻路对象
             autoFindHim = new AutoFindHim();
+            //把寻路的所有坐标集合拿出来
             wayList = autoFindHim.getWayLine(this, tank);
             //第一个是终点坐标，倒数第一个方块是 起点坐标，倒数第二个是与起点相邻的路线方块
-            i = wayList.size() - 2;
+            //坦克下一次走的坐标,对应集合中的索引,为了避免size=1时的,1-2=-1 造成的索引越界异常,这里做个三目运算
+            i = wayList.size() - 2>=0 ? wayList.size() - 2 : 0;
+            //通过flag,控制移动速度
             flag = 0;
+            //根据下一个方块的位置,生成坦克的移动方向
             Direction direction = this.tankMove(wayList);
             if (direction != null) {
                 this.move(direction);
-            }
+            }*/
         }
         return this;
     }
