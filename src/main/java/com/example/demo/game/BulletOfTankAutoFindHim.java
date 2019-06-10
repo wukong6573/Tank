@@ -1,5 +1,7 @@
 package com.example.demo.game;
 
+import lombok.Data;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,6 +14,7 @@ import java.util.List;
  * 博客地址：https://blog.csdn.net/leq3915/article/details/80714902
  *
  */
+@Data
 public class BulletOfTankAutoFindHim {
     public FKPosition beginFk = null;
     public FKPosition endFk = null;
@@ -251,7 +254,7 @@ public class BulletOfTankAutoFindHim {
         List<FKPosition> list = new ArrayList<FKPosition>();
         //判断上面的方块是否符合条件
         //判断是否超过越边界
-        if(fk.getY() - 1 > 0){
+        if(fk.getY() - 1 >=0){
             FKPosition tmpFk = new FKPosition(fk.getX(), fk.getY() - 1, fk);
             //判断是否是障碍物/已计算过的方块
             if(!GameWindow.bulletOfTankZhangaiList.contains(tmpFk)
@@ -261,7 +264,7 @@ public class BulletOfTankAutoFindHim {
         }
 
         //判断下面的方块是否符合条件
-        if(fk.getY() + 1 < Config.HEIGHT/ Config.SIZE){
+        if(fk.getY() + 1 <= Config.HEIGHT/ Config.SIZE){
             FKPosition tmpFk = new FKPosition(fk.getX(), fk.getY() + 1, fk);
             if(!GameWindow.bulletOfTankZhangaiList.contains(tmpFk)
                     && !closedList.contains(tmpFk)){
@@ -270,7 +273,7 @@ public class BulletOfTankAutoFindHim {
         }
 
         //判断左面的方块是否符合条件
-        if(fk.getX() - 1 > 0){
+        if(fk.getX() - 1 >= 0){
             FKPosition tmpFk = new FKPosition(fk.getX() - 1, fk.getY(), fk);
             if(!GameWindow.bulletOfTankZhangaiList.contains(tmpFk)
                     && !closedList.contains(tmpFk)){
@@ -278,7 +281,7 @@ public class BulletOfTankAutoFindHim {
             }
         }
         //判断右面的方块是否符合条件
-        if(fk.getX() + 1 < Config.WIDTH/ Config.SIZE){
+        if(fk.getX() + 1 <= Config.WIDTH/ Config.SIZE){
             FKPosition tmpFk = new FKPosition(fk.getX() + 1, fk.getY(), fk);
             if(!GameWindow.bulletOfTankZhangaiList.contains(tmpFk)
                     && !closedList.contains(tmpFk)){

@@ -72,7 +72,7 @@ public class GameWindow extends Window {
         tanks.add(tank2);
         //tank子弹 追踪tank2，enemyTank也要变成障碍物
         bulletOfTankZhangaiList.addAll(zhangaiList);
-//        bulletOfTankZhangaiList.add(new FKPosition(tank.x/Config.SIZE,tank.y/Config.SIZE));
+        bulletOfTankZhangaiList.add(new FKPosition(tank.x/Config.SIZE,tank.y/Config.SIZE));
 //        bulletOfTankZhangaiList.add(new FKPosition(enemyTank.x / Config.SIZE, enemyTank.y / Config.SIZE));
 //        zhangaiList.add(new FKPosition(tank.x/Config.SIZE,tank.y/Config.SIZE));
 //        tanks.add(enemyTank);
@@ -242,10 +242,8 @@ public class GameWindow extends Window {
 
         for (Bullet bullet : blist) {
             if (bullet instanceof BulletOfTank) {
-                bullet.autoFindHim(tank2).draw();
-                if(bullet.isDestroyed()){
-                    System.out.println("真的还想再活500年");
-                }
+                bullet.draw();
+                bullet.autoFindHim(tank2);
             } else {
                 bullet.draw();
             }

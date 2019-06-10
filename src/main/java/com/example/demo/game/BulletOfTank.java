@@ -75,7 +75,6 @@ public class BulletOfTank extends Bullet {
     }
 
     private void takeMove(List<FKPosition> wayList) {
-        int speed = Config.SIZE/2;
         int i = 0;
         i = wayList.size() - 2 >= 0 ? wayList.size() - 2 : 0;
         if (wayList.size() == 0) {
@@ -86,26 +85,25 @@ public class BulletOfTank extends Bullet {
             System.out.println("到达终点");
         }
 
-        System.out.println(wayList.size());
         FKPosition fk = wayList.get(i);
         //向上
-        if (this.y / Config.SIZE > fk.getY()) {
-            this.y -= speed;
+        if (this.y> fk.getY()*Config.SIZE) {
+            this.y =fk.getY()*Config.SIZE;
         }
 
         //向下
         if (this.y / Config.SIZE < fk.getY()) {
-            this.y += speed;
+            this.y =fk.getY()*Config.SIZE;
         }
 
         //向左
-        if (this.x / Config.SIZE > fk.getX()) {
-            this.x -= speed;
+        if (this.x> fk.getX()*Config.SIZE) {
+            this.x=fk.getX()*Config.SIZE;
         }
 
         //向右
-        if (this.x / Config.SIZE < fk.getX()) {
-            this.x += speed;
+        if (this.x< fk.getX()*Config.SIZE) {
+            this.x =fk.getX()* Config.SIZE;
         }
     }
 

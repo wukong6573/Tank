@@ -139,9 +139,9 @@ public abstract class Bullet {
 
     public Boolean checkHit(TankFactory p) {
         //子弹不和自家的坦克产生碰撞
-        if(this instanceof BulletOfTank && p instanceof Tank){
-            return false;
-        }
+//        if(this instanceof BulletOfTank && p instanceof Tank){
+//            return false;
+//        }
         if(this instanceof BulletOfEnemyTank && p instanceof EnemyTank){
             return false;
         }

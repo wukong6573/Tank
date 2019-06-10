@@ -84,7 +84,7 @@ public class FKPosition {
     public boolean equals(Object obj) {
         if(((FKPosition)obj).getX() == this.x && ((FKPosition)obj).getY() == this.y){
             return true;
-        }else{
+        }else {
             return false;
         }
     }
