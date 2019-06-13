@@ -6,6 +6,8 @@ import com.example.demo.util.XDocService;
 import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author dell
@@ -13,7 +15,11 @@ import java.math.BigDecimal;
  */
 public class GameTest{
 	public static void main(String[] args) {
-		GameWindow gw = new GameWindow(Config.TITLE, Config.WIDTH, Config.HEIGHT, Config.FPS);
-		gw.start();
+//		GameWindow gw = new GameWindow(Config.TITLE, Config.WIDTH, Config.HEIGHT, Config.FPS);
+//		gw.start();
+
+		Map<String,Object> map=new HashMap<>();
+		map.put("echostr",666);
+		System.out.println(map.toString());
 	}
 }

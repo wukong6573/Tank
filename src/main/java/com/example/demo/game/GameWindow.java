@@ -70,9 +70,10 @@ public class GameWindow extends Window {
 
         tanks.add(tank);
         tanks.add(tank2);
+//        tanks.add(enemyTank);
         //tank子弹 追踪tank2，enemyTank也要变成障碍物
         bulletOfTankZhangaiList.addAll(zhangaiList);
-        bulletOfTankZhangaiList.add(new FKPosition(tank.x/Config.SIZE,tank.y/Config.SIZE));
+        bulletOfTankZhangaiList.add(new FKPosition(tank2.x/Config.SIZE,tank2.y/Config.SIZE));
 //        bulletOfTankZhangaiList.add(new FKPosition(enemyTank.x / Config.SIZE, enemyTank.y / Config.SIZE));
 //        zhangaiList.add(new FKPosition(tank.x/Config.SIZE,tank.y/Config.SIZE));
 //        tanks.add(enemyTank);
@@ -253,10 +254,10 @@ public class GameWindow extends Window {
             tankFactory.draw();
         }
         //AI坦克方向,并发射子弹
-//        Bullet bu = enemyTank.getDirection(tank).shot();
-//        if (bu != null) {
-//            blist.add(bu);
-//        }
+        Bullet bu = enemyTank.getDirection(tank).shot();
+        if (bu != null) {
+            blist.add(bu);
+        }
 
         for (Pictrue p : list) {
             p.draw();

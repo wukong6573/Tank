@@ -12,6 +12,10 @@
 AppId:  wx8361ba5c8fd9a420
 AppSecret:   104d7e1a30e570f3da6ab3f18f538147(也叫做key)
 
+小程序账号:
+vip@yun-bag.com
+ysb123456
+
 
 实名认证博客:
 https://blog.csdn.net/fannie_yang/article/details/80311700
@@ -88,7 +92,7 @@ if( (num & 1) !=0 ) , true代表是奇数,false代表为偶数
             #{exists}
         </foreach>
 11.Mybatis Mapper.xml 需要查询返回List<String>
-<select id="getByIds"  parameterType="java.lang.String"  resultType="java.util.List">
+<select id="getByIds"  parameterType="java.lang.String"  resultType="java.lang.String>
 
 12.Illegal mix of collations (utf8mb4_unicode_ci,IMPLICIT) and (utf8mb4_general_ci,IMPLICIT) for operation ‘=’
 在使用的varchar 类型字段中添加字符排序方式：select * from user where mobile = in_mobile COLLATE utf8_unicode_ci;
@@ -118,7 +122,7 @@ public class Student{
 17.springboot 的@datetimeformat 不起作用问题
 @DateTimeFormat(pattern = "yyyy年MM月dd日 HH:mm:ss")
 @JsonFormat(pattern = "yyyy年MM月dd日 HH:mm:ss",timezone = "GMT+8")
-private Date createDate;
+private Date createDate; (注意是Date类型才生效)
 
 18. 注意:用Arrays.asList( )方法,添加的集合,不支持 list.remove( )操作.
 
@@ -161,7 +165,71 @@ private Date createDate;
             e.printStackTrace();
         }
 
-21.
+21.物流助手--产生运单号,总是失败,检查参数的结构,json 嵌套一个jsonList
+
+ "cargo": {
+    "count": 2,
+    "weight": 5.5,
+    "space_x": 30.5,
+    "space_y": 20,
+    "space_z": 20,
+    "detail_list": [
+      {
+        "name": "一千零一夜钻石包",
+        "count": 1
+      },
+      {
+        "name": "爱马仕铂金包",
+        "count": 1
+      }
+    ]
+  }
+
+22.mysql设置自动增长的值:
+ ALTER   TABLE   表名 AUTO_INCREMENT   =10001000; 
+
+23.给表新增一列的语法:
+alter table book add title varchar(1024) not null default '' after id;
+
+24.调用第三方接口,返回有中文,解决乱码问题的代码
+BufferedReader reader = new BufferedReader(new InputStreamReader(entity.getContent(), "UTF-8"));
+                String temp = reader.readLine();
+                content+=temp;
+                entity.consumeContent();
+
+25.分页查询需要用到的操作:
+PageHelper.startPage(commentVo.getPage(), commentVo.getPageSize(), true);
+        List<VideoComment> c1 = commentDao.queryComment1(commentVo);
+        PageInfo<VideoComment> comments = new PageInfo<>(c1);
+        List<VideoComment> comments1 = comments.getList();
+
+
+26.实体对象里面有个List<Object> onelist,mybatis 的foreach的sql写法:
+注:collection 是 onelist,而不是list
+<foreach collection="onelist," item="item" index="index" separator="union">
+            SELECT
+            UUID(),
+            #{item.oosUrl},
+            #{item.sentenceId},
+            #{item.startTime},
+            #{item.endTime},
+            #{id},
+            NOW()
+            FROM dual
+</foreach>
+
+27.把本地的jar安装到maven仓库:
+首先,确定是否配置过maven环境变量%MAVEN_HOME%,在path里面添加 %MAVEN_HOME%\bin 即可
+
+执行命令: mvn install:install-file -Dfile=D:\MiPush_Server_Java_20190420\java\sdk\MiPush_SDK_Server_2_2_21.jar 
+-DgroupId=MiPush.SDK.Server -DartifactId=MiPush_SDK_Server -Dversion=2.2.21 -Dpackaging=jar
+
+导入依赖:
+<dependency>
+      <groupId>MiPush.SDK.Server</groupId>
+      <artifactId>MiPush_SDK_Server</artifactId>
+      <version>2.2.21</version>
+    </dependency>
 
 
 

@@ -97,6 +97,16 @@ DATE_FORMAT(create_date,'%u')
 
 16.不能先order by 再group by  ,要 先group by 再 order by 
 
+17.获取含分隔符的字符串的数量:
+SELECT LENGTH('1,2,3,4,5,6,7') - LENGTH(REPLACE('1,2,3,4,5,6,7', ',', '')) + 1;
+返回的是 7,也就是分割后的数量
+
+18.MySQL按照符号,链接字符串:
+CONCAT_WS(x,s1,s2,...)	返回多个字符串拼接之后的字符串，每个字符串之间有一个x。
+
+19.分割之后,取出第几个的字符串:
+SELECT SUBSTRING_INDEX(SUBSTRING_INDEX(seq_name,';', index), ';', -1),,,index代表在原字符串中在第几个位置
+
 
 
 
