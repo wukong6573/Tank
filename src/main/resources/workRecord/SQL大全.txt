@@ -107,8 +107,67 @@ CONCAT_WS(x,s1,s2,...)	返回多个字符串拼接之后的字符串，每个字
 19.分割之后,取出第几个的字符串:
 SELECT SUBSTRING_INDEX(SUBSTRING_INDEX(seq_name,';', index), ';', -1),,,index代表在原字符串中在第几个位置
 
+20.添加INDEX(普通索引)
 
+语法：ALTER TABLE `表名` ADD INDEX index_name ( `列名称` )
 
+21.通过explain分析SQL的执行计划
+type:表示MySQL在表中找到所需行的方式，或者叫访问类型，常见类型如下(从左到右，性能由差到好)
+
+ALL  index  range ref eq_ref  const,system  NULL
+
+ALL: 全表扫描
+
+index: 索引全扫描
+
+range:索引范围扫描
+
+ref:使用非唯一索引扫描
+
+eq_ref:使用唯一索引扫描
+
+const，system:单表中最多只有一个匹配行
+
+22.union all 语法：
+温馨提示：使用 UNION ALL 的时候，只是单纯的把各个查询组合到一起而不会去判断数据是否重复。
+SELECT aid,title,create_date FROM article UNION ALL SELECT bid,title,create_date FROM blog
+
+23.union all 全部数据进行排序:
+温馨提示：应对单个 SELECT 语句加圆括号，并把 ORDER BY 或 LIMIT 放到最后一个的后面，如果create_date 起了别名，则
+order by 后面只能用 别名。
+(SELECT aid,title,create_date createDate FROM article) UNION ALL (SELECT bid,title,create_date FROM blog) order by createDate 
+
+24.union all 对子句子使用order by：
+温馨提示：在子句中使用 ORDER BY，由于优先级问题，需要将整个子句加圆括号()，且必须与 LIMIT 结合使用：
+(SELECT aid,title FROM article ORDER BY aid DESC LIMIT 10) 
+UNION ALL
+(SELECT bid,title FROM blog ORDER BY bid DESC LIMIT 10)
+
+25.对List集合去重：
+listIds.stream().distinct().collect(Collectors.toList())
+
+26.从集合中获取某个参数，单独组成一个集合：
+allCats.stream().map(CrmPrdCat::getCatId).collect(Collectors.toList());
+
+27.除了主键以外的每个字段重复,不允许插入:
+注意:需要添加的不重复字段在执行 SELECT title FROM t_encyclopedia_questions操作,查出来的title不能查询出null的,否则插入不成功,所以应该加上一个条件: where title is not null
+INSERT INTO t_encyclopedia_questions (id,encyclopedia_id,title) 
+SELECT '11222','112266','今晚6点22' FROM DUAL 
+WHERE '999' NOT IN (SELECT title FROM t_encyclopedia_questions where title is not null)
+
+28.用union all 实现不同的两张表中,搜索出来数据的sql:
+SELECT id,video_name resourceName,video_img resourceImg,video_url videoUrl FROM t_sinology_video WHERE isDelete='N' AND video_name LIKE concat('%',#{queryDate},'%') 
+UNION ALL 
+SELECT id,book_name resourceName,book_img resourceImg,NULL videoUrl FROM t_gx_book WHERE removed='N' AND book_name LIKE concat('%',#{queryDate},'%')
+
+29.update语句,骚操作:
+使用时间小于数据库中的值,就更新数据库,因为< 符号,mybatis会报错,所以使用CDATA来处理
+UPDATE
+  `t_idiom_dragon_record`
+SET
+  `use_date` = if(#{useDate} <![CDATA[<]]> use_date,#{useDate},`use_date`),
+  `create_date` = NOW()
+WHERE `uid` = #{uid} AND `level`=#{level}
 
 
 

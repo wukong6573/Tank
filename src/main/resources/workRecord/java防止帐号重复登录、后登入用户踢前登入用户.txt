@@ -12,8 +12,3 @@ loginStatus（命名就随便了）
 这时候，将更改后的值存储在session中，
 则每次进行有关用户操作的时候， 都去表中查看loginStatus的值跟你session中的值是否相同
 如果不相同，则将session存储的用户信息remove掉
---------------------- 
-作者：梦里梦见醒不来丶 
-来源：CSDN 
-原文：https://blog.csdn.net/xujiangdong1992/article/details/72229687 
-版权声明：本文为博主原创文章，转载请附上博文链接！

@@ -16,6 +16,10 @@ AppSecret:   104d7e1a30e570f3da6ab3f18f538147(也叫做key)
 vip@yun-bag.com
 ysb123456
 
+100快递账号:   https://sso.kuaidi100.com/sso/authorize.do
+用户名：yunshubao
+密码：Ayang1213
+
 
 实名认证博客:
 https://blog.csdn.net/fannie_yang/article/details/80311700
@@ -206,7 +210,8 @@ PageHelper.startPage(commentVo.getPage(), commentVo.getPageSize(), true);
 
 26.实体对象里面有个List<Object> onelist,mybatis 的foreach的sql写法:
 注:collection 是 onelist,而不是list
-<foreach collection="onelist," item="item" index="index" separator="union">
+（insert的时候，不需要values）
+<foreach collection="onelist" item="item" index="index" separator="union">
             SELECT
             UUID(),
             #{item.oosUrl},
@@ -230,6 +235,170 @@ PageHelper.startPage(commentVo.getPage(), commentVo.getPageSize(), true);
       <artifactId>MiPush_SDK_Server</artifactId>
       <version>2.2.21</version>
     </dependency>
+容易出现的问题:
+ No plugin found for prefix '?install' in the current project and in the plugin groups:
+
+28.mybatis插入语句,返回主键id:
+<selectKey resultType="java.lang.Long" keyProperty="id" order="AFTER">
+            select @@IDENTITY as id
+        </selectKey>
+
+29.如果parameter 参数是 List<Object> lists,插入insert语句的foreach 循环代码如下:
+注意:item要写上去,collection="list" ,并不是集合的名字
+<foreach collection="list" item="item" index="index" separator="union">
+            SELECT
+            #{item.code},
+            #{item.name},
+            NOW()
+            FROM dual
+ </foreach>
+
+30.重新Collections.sort方法,自定义排序方式:
+List<Integer> list = Arrays.asList(1, 3, 5);
+ Collections.sort(list, new Comparator<Integer>() {
+            @Override
+            public int compare(Integer o1, Integer o2) {
+                if(o1<o2){
+              //compare返回的数 大于0,就把两个数的位置调换,,所以做的是降序操作
+                    return 1;
+                }else if(o1>o2){
+                    return -1;
+                }else {
+                    return 0;
+                }
+            }
+});
+ System.out.println(list); //返回  5 3 1
+
+31.对集合进行过滤：
+    List<Integer> list = Arrays.asList(1, 7, 5);
+    List<Integer> collect = list.stream().filter(index -> 1 == index).collect(Collectors.toList());
+    System.out.println(collect);  //返回 [1]
+
+32.spring 的版本不兼容，我这边的原因是spring-boot-starter-parent的版本太高，我把它改为1.5.6.RELEASE就可以了：
+org.springframework.boot.context.logging.ClasspathLoggingApplicationListener...
+
+33.这个类TokenEndpoint extends AbstractEndpoint 把(Principal 里的"android" 变成，登录的账号：
+@RequestMapping(value = "/oauth/token", method=RequestMethod.POST)
+	public ResponseEntity<OAuth2AccessToken> postAccessToken(Principal principal, @RequestParam
+	Map<String, String> parameters) ；
+
+34.验证access_token流程 
+OAuth2AuthenticationProcessingFilter 类
+Authentication authResult = authenticationManager.authenticate(authentication);
+——》OAuth2AuthenticationManager authenticate 方法 OAuth2Authentication auth = tokenServices.loadAuthentication(token);
+
+——》DefaultTokenServices loadAuthentication 方法 OAuth2AccessToken accessToken = tokenStore.readAccessToken(accessTokenValue);
+
+——》JdbcTokenStore readAccessToken 方法，
+然后会调用 TokenStore 的readAuthentication（OAuth2AccessToken token)）方法，生成 OAuth2Authentication，并返回
+所以，我们只需要重新TokenStore的readAccessToken 方法，就可以自定义验证方式
+
+35.List<object> list 数据类型不用pageInfo 做分页的分页处理：
+比如集合中的内容为1,2,3,4,5，list.sublist(2,4)就返回一个子集合，它的内容包括从下标为2到下标为4,而且这是左闭右开的，就是说是从大于等于2到小于4，那子集内容就是3,4（集合的下标都是从0开始）
+
+分页逻辑：
+int subSize = 1000;  //每页数量
+        int subCount = list.size();  //总数
+        int subPageTotal = (subCount / subSize) + ((subCount % subSize > 0) ? 1 : 0);
+        // 根据页码取数据
+        for (int i = 0, len = subPageTotal - 1; i <= len; i++) {
+            // 分页计算
+            int fromIndex = i * subSize;
+            int toIndex = ((i == len) ? subCount : ((i + 1) * subSize));
+            List<String> strings = list.subList(fromIndex, toIndex);
+        }
+
+36.springboot使用@EnableScheduling注解,完成定时任务:
+1第一步:
+自定义一个类, ScheduConfig 类上面 使用 @Scheduling 注解,
+2.第二部:
+ScheduConfig中 再写一方法 runTask() 方法上 使用 @Scheduled(cron = "0,1,2,3,4 * * * * MON-SAT")
+ 注解
+其中Scheduled注解中有以下几个参数：
+
+　　1.cron是设置定时执行的表达式，如 0 0/5 * * * ?每隔五分钟执行一次 秒 分 时 天 月
+
+　　2.zone表示执行时间的时区
+
+　　3.fixedDelay 和fixedDelayString 表示一个固定延迟时间执行，上个任务完成后，延迟多长时间执行
+
+　　4.fixedRate 和fixedRateString表示一个固定频率执行，上个任务开始后，多长时间后开始执行
+
+　　5.initialDelay 和initialDelayString表示一个初始延迟时间，第一次被调用前延迟的时间
+3.第三部:
+如果是放在springboot项目中,可能不需要写main() 方法,
+public static void main(String[] args) {
+//利用AnnotationConfigApplicationContext 把ScheduConfig.class 给它,就可以执行定时任务了
+ AnnotationConfigApplicationContext applicationContext=new AnnotationConfigApplicationContext(ScheduConfig.class);
+}
+举例：
+public class ScheduConfig {
+/**
+     * second（秒）, minute（分）, hour（时）, day of month（日）, month（月）, day of week（周几）.
+    
+ * 例子：
+     
+*  【0 0/5 14,18 * * ?】 每天14点整，和18点整，每隔5分钟执行一次
+     
+*  【0 15 10 ? * 1-6】 每个月的周一至周六10:15分执行一次
+     
+*  【0 0 2 ? * 6L】每个月的最后一个周六凌晨2点执行一次
+    
+ *  【0 0 2 LW * ?】每个月的最后一个工作日凌晨2点执行一次
+     
+*  【0 0 2-4 ? * 1#1】每个月的第一个周一凌晨2点到4点期间，每个整点都执行一次；
+     */
+    
+
+@Scheduled(cron = "0,1,2,3,4 * * * * MON-SAT")
+      //方法上加上注解
+ public static void runTask(){
+      
+  System.out.println(new Date()+"发布王者战报");
+   
+ }
+
+public static void main(String[] args) {
+   //利用AnnotationConfigApplicationContext 把ScheduConfig.class 给它,就可以执行定时任务了
+ AnnotationConfigApplicationContext applicationContext=new AnnotationConfigApplicationContext(ScheduConfig.class);
+}
+}
+
+37. BigDecimal 比较:
+
+BigDecimal a = new BigDecimal (101);
+
+BigDecimal b = new BigDecimal (111);
+ 
+
+//使用compareTo方法比较
+//注意：a、b均不能为null，否则会报空指针
+
+if(a.compareTo(b) == -1){
+    System.out.println("a小于b");
+}
+ 
+
+if(a.compareTo(b) == 0){
+    System.out.println("a等于b");
+}
+
+ 
+if(a.compareTo(b) == 1){
+    System.out.println("a大于b");
+}
+ 
+
+if(a.compareTo(b) > -1){
+    System.out.println("a大于等于b");
+}
+ 
+
+if(a.compareTo(b) < 1){
+    System.out.println("a小于等于b");
+}
+
 
 
 
