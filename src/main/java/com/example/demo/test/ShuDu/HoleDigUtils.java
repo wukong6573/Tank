@@ -1,11 +1,5 @@
 package com.example.demo.test.ShuDu;
 
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
-
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.util.*;
 
@@ -14,26 +8,34 @@ public class HoleDigUtils {
     private Random random = new Random();
 
     public void digHolesByGameDifficulty(DifficultyLevel level) {
-        int[][] array = ShuDu.generateShuDu();
-        for (int i = 0; i < array.length; i++) {
-            for (int n = 0; n < array[i].length; n++) {//一行中有多少个元素（即多少列）
-                System.out.print(array[i][n] + " ");
+        //生成数独
+        int[][] shuduAnswerArray = ShuDu.generateShuDu();
+        System.out.println("==================数独标准答案================================");
+        for (int i = 0; i < shuduAnswerArray.length; i++) {
+            for (int n = 0; n < shuduAnswerArray[i].length; n++) {//一行中有多少个元素（即多少列）
+                System.out.print(shuduAnswerArray[i][n] + " ");
             }
             System.out.println();
         }
-        System.out.println("============================================================");
         int randomInt = 0;
         randomInt = getRandomNumberByLevel(level);
-        int[][] arrayQuestion = getQuestionArray(randomInt, array);
-        for (int i = 0; i < arrayQuestion.length; i++) {
-            for (int j = 0; j < arrayQuestion.length; j++) {
-                System.out.print(arrayQuestion[i][j] + " ");
+        int[][] shuduQuestionArray = getQuestionArray(randomInt, shuduAnswerArray);
+
+        System.out.println("==========数独题目====================");
+        for (int i = 0; i < shuduQuestionArray.length; i++) {
+            for (int j = 0; j < shuduQuestionArray.length; j++) {
+                System.out.print(shuduQuestionArray[i][j] + " ");
             }
             System.out.println();
         }
 
-        JSONArray jsonArray = JSONArray.fromObject(arrayQuestion);
-        System.out.println(jsonArray);
+        //揭秘数独
+//        System.out.println("==========数独解析====================");
+//        ShuDuAnswer.showShuDuAnswer(arrayQuestion);
+
+        //把二维数组转换成json对象,返回
+//        JSONArray jsonArray = JSONArray.fromObject(arrayQuestion);
+//        System.out.println(jsonArray);
     }
 
     private int[][] getQuestionArray(int randomInt, int[][] array) {
