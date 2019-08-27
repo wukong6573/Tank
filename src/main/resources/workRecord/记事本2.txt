@@ -10,7 +10,7 @@
 
 小程序码的密钥:
 AppId:  wx8361ba5c8fd9a420
-AppSecret:   104d7e1a30e570f3da6ab3f18f538147(也叫做key)
+AppSecret:   104d7e1a30e570f3da6ab3f18f538147
 
 小程序账号:
 vip@yun-bag.com
@@ -29,13 +29,12 @@ AppCode：785ddf50eea34991956c58f8e2e5f50e
 
 支付的:
 商户号: 1521446821
-商户号密钥: Ybsxb20150701passwrodWx123456789
+API密钥: Ybsxb20150701passwrodWx123456789(也叫做支付的key)
 
 
 打开远程命令: mstsc  
 123密码:www.163.com
 
-苏教版二年级上学期
 
 某一个模块的application.yml配置:
 1.自身的端口号和模块名称
@@ -46,11 +45,6 @@ AppCode：785ddf50eea34991956c58f8e2e5f50e
 6.hystrix熔断机制  -------不太理解
 7.日志打印级别配置
 8.数据库相关配置
-
-
-云书包/学霸神器 可用账户:
-17688888888
-ysb123456
 
 常出现的bug:
 1.String body ="" ,原因是 oauth认证类出现异常,没有查到相关数据
@@ -398,6 +392,32 @@ if(a.compareTo(b) > -1){
 if(a.compareTo(b) < 1){
     System.out.println("a小于等于b");
 }
+
+38.com.github.pagehelper.PageHelper 有点问题,当查询的页码没数据,插件会查询所有的数据返回,不符合开发需求
+需要手动控制一下:
+//分页四连
+        PageHelper.startPage(oralLanguageQuery.getPage(),oralLanguageQuery.getPageSize());
+        List<OralUnit> oralUnits = oralLanguageDao.queryUnitsByOralLanguageTable(oralLanguageQuery);
+        PageInfo<OralUnit> pageInfo=new PageInfo<>(oralUnits);
+        //分页插件存在一个问题:当查询的页面没数据,插件会查询所有的数据返回,不符合开发需求
+        if(oralLanguageQuery.getPage() > pageInfo.getPages()){
+            pageInfo.setList(Collections.emptyList());//设置空集合
+        }
+
+39.gitBash 查看提交代码的用户名和修改用户信息
+获取邮箱和用户名:
+PS E:\mysite> git config user.email 
+aaa@camnpr.com  
+PS E:\mysite> git config user.name 
+aaa
+设置当前仓库的:
+PS E:\mysite> git config user.name aaa 
+PS E:\mysite> git config user.email aaa@camnpr.com
+
+设置全局user.name/user.email
+PS E:\mysite> git config --global user.name bbb
+ PS E:\mysite> git config --global user.email bbb@gmail.com
+
 
 
 

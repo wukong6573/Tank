@@ -19,6 +19,20 @@ delete from table1 where not exists ( select * from table2 where table1.field1=t
 2、说明：选择在每一组b值相同的数据中对应的a最大的记录的所有信息(类似这样的用法可以用于论坛每月排行榜,每月热销产品分析,按科目成绩排名,等等.)
 select a,b,c from tablename ta where a=(select max(a) from tablename tb where tb.b=ta.b)
 
+2.1 个人推荐排行榜sql如下:
+  排序 , 分组和排序 , 设置排行字段
+ SELECT obj2.*,@rownum :=@rownum+1 rank FROM (
+SELECT obj.* FROM (
+    SELECT
+    tsr.uid,
+    tbui.name userName,
+    tbui.head_url headUrl,
+    tsr.use_date bestTime,
+    tsr.create_date createDate
+    FROM t_shudu_record tsr JOIN t_base_user_info tbui ON tsr.uid=tbui.uid
+    WHERE tsr.level=#{level} ORDER BY tsr.use_date ASC ,tsr.create_date ASC) obj
+    GROUP BY obj.uid ORDER BY obj.bestTime ASC) obj2 JOIN (SELECT @rownum :=0) t
+
 3 分组查询 GROUP BY 和GROUP_CONCAT()函数示例：
 语句 :
 SELECT locus,GROUP_CONCAT(id) FROM info WHERE locus IN('AB086827','AF040764') GROUP BY locus;
@@ -160,14 +174,22 @@ SELECT id,video_name resourceName,video_img resourceImg,video_url videoUrl FROM 
 UNION ALL 
 SELECT id,book_name resourceName,book_img resourceImg,NULL videoUrl FROM t_gx_book WHERE removed='N' AND book_name LIKE concat('%',#{queryDate},'%')
 
-29.update语句,骚操作:
-使用时间小于数据库中的值,就更新数据库,因为< 符号,mybatis会报错,所以使用CDATA来处理
-UPDATE
-  `t_idiom_dragon_record`
-SET
-  `use_date` = if(#{useDate} <![CDATA[<]]> use_date,#{useDate},`use_date`),
-  `create_date` = NOW()
-WHERE `uid` = #{uid} AND `level`=#{level}
+29.把mysql中的字段中的符号,去掉或者替换掉:
+语法：replace(object,search,replace)
+ 
+意思：把object中出现search的全部替换为replace
+UPDATE t_user_parent SET phone=REPLACE(phone,'(',''),phone=REPLACE(phone,')',''),NAME=REPLACE(NAME,'(',''),NAME=REPLACE(NAME,')','')
 
+30.mysql统计相同数字,连续出现的最高次数（应用:统计连胜次数）:
+SELECT MAX(obj.rownum) FROM (SELECT tsr.id,tsr.win,
+ IF((tsr.win=@pname) , @row:=@row+1 , @row:=1) rownum,
+ @pname:=tsr.win
+ FROM t_shudu_record tsr JOIN (SELECT @row:=0, @pname:=1 ) t
+ WHERE tsr.uid=#{uid} ORDER BY tsr.create_date DESC) obj
 
-
+31.在mysql中提供了一些切割字符串的函数，其中SUBSTRING_INDEX(str, delim, count)
+str: 要处理的字符串
+delim: 分割符
+count: 计数 如果为正数，则从左开始数，如果为负数，则从右开始数
+举例:
+SELECT substring_index('www.baidu.com','.', 1);    #www

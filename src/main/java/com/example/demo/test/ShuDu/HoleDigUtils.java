@@ -17,8 +17,8 @@ public class HoleDigUtils {
             }
             System.out.println();
         }
-        int randomInt = 0;
-        randomInt = getRandomNumberByLevel(level);
+        //根据关卡,转换成随机数,根据随机数去抠格子
+        int randomInt = getRandomNumberByLevel(level);
         int[][] shuduQuestionArray = getQuestionArray(randomInt, shuduAnswerArray);
 
         System.out.println("==========数独题目====================");
@@ -41,7 +41,7 @@ public class HoleDigUtils {
     private int[][] getQuestionArray(int randomInt, int[][] array) {
         int[][] arrayQuestion = new int[9][9];
         for (int i = 0; i < array.length; i++) {
-        Map<Integer, Integer> map = new HashMap<>();
+            Map<Integer, Integer> map = new HashMap<>();
             //每一行，生成 randomInt 个0-8随机数，每个数代表这一行中的位置，并把这个位置的数变成0，来实现“挖空”的效果
             while (map.size() < randomInt) {
                 Random random = new Random();
@@ -70,7 +70,7 @@ public class HoleDigUtils {
      * 根据不同的游戏难度，获取随机数
      */
     public int getRandomNumberByLevel(DifficultyLevel level) {
-        int randomValue = 5;
+        int randomValue = 0;
 
 //        switch (level) {
 //            case EASY:
@@ -105,27 +105,27 @@ public class HoleDigUtils {
         switch (level) {
             case EASY:
                 /**
-                 * 产生随机数[4,5]
+                 * 产生随机数[2,3]
                  */
-                randomValue = random.nextInt(2) + 4;
+                randomValue = random.nextInt(2) + 1;
                 break;
             case MEDIUM:
                 /**
-                 * 产生随机数[2,3]
+                 * 产生随机数[4,5]
                  */
-                randomValue = random.nextInt(2) + 2;
+                randomValue = 3;
                 break;
             case DIFFICULT:
                 /**
-                 * 产生随机数[4,5]
+                 * 产生随机数[6]
                  */
-                randomValue = random.nextInt(2) + 4;
+                randomValue =4;
                 break;
             case EVIL:
                 /**
                  * 产生随机数[6,7]
                  */
-                randomValue = random.nextInt(2) +6;
+                randomValue = 5;
                 break;
             default:
                 break;
@@ -151,10 +151,9 @@ public class HoleDigUtils {
         return result;
     }
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
         HoleDigUtils digger = new HoleDigUtils();
-
-        digger.digHolesByGameDifficulty(DifficultyLevel.EVIL);
+        digger.digHolesByGameDifficulty(DifficultyLevel.DIFFICULT);
     }
 }
 
