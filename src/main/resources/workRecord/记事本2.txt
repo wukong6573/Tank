@@ -418,6 +418,24 @@ PS E:\mysite> git config user.email aaa@camnpr.com
 PS E:\mysite> git config --global user.name bbb
  PS E:\mysite> git config --global user.email bbb@gmail.com
 
+40.强行推送代码到远程仓库以及回退版本的一些操作：
+#回退所有内容到上一个版本 
+git reset HEAD^ 
+#回退a.py这个文件的版本到上一个版本 
+git reset HEAD^ a.py 
+#向前回退到第3个版本 
+git reset –soft HEAD~3 
+#将本地的状态回退到和远程的一样 
+git reset –hard origin/master 
+#回退到某个版本 
+git reset 057d 
+#回退到上一次提交的状态，按照某一次的commit完全反向的进行一次commit 
+git revert HEAD 
+
+#强行推送
+git push origin source -f
+
+
 
 
 

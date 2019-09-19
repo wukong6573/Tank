@@ -187,9 +187,29 @@ SELECT MAX(obj.rownum) FROM (SELECT tsr.id,tsr.win,
  FROM t_shudu_record tsr JOIN (SELECT @row:=0, @pname:=1 ) t
  WHERE tsr.uid=#{uid} ORDER BY tsr.create_date DESC) obj
 
-31.在mysql中提供了一些切割字符串的函数，其中SUBSTRING_INDEX(str, delim, count)
+31.Mysql字符串截取函数:
+-1、从左开始截取字符串 
+left（str, length） 
+说明：left（被截取字段，截取长度）
+
+-2、从右开始截取字符串 
+right（str, length） 
+说明：right（被截取字段，截取长度）
+
+-3、截取字符串 
+substring（str, pos） 
+substring（str, pos, length） 
+说明：substring（被截取字段，从第几位开始截取） 
+substring（被截取字段，从第几位开始截取，截取长度）
+
+-4、SUBSTRING_INDEX(str, delim, count)
 str: 要处理的字符串
 delim: 分割符
 count: 计数 如果为正数，则从左开始数，如果为负数，则从右开始数
 举例:
 SELECT substring_index('www.baidu.com','.', 1);    #www
+
+32.获取前8天的sql：（用于会员充值，增加到期时间）
+SELECT DATE_SUB(CURDATE(), INTERVAL 8 DAY) 
+--CURDATE()指的是当前日期
+--如果是 -8，就是向后推8天
