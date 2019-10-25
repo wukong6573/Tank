@@ -49,6 +49,7 @@ SELECT CONCAT(id, ‘，’, name,age) AS con FROM info LIMIT 1;返回结果为
 +----------+
 5.查询本周的数据
 WHERE  YEARWEEK(DATE_FORMAT(create_date,'%Y-%m-%d')) = YEARWEEK(NOW())  (周日~周一)
+
 查询本周的数据(二):
 (SELECT WEEK(DATE_ADD(NOW(),INTERVAL 6 DAY),2)) (周一~周日)
 

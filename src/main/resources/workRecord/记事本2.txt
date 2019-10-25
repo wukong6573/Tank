@@ -8,6 +8,29 @@
 用户名:ftpadmin
 密码:ysb123456
 
+一键发包给测试的地址：
+https://192.168.1.201:8081/  
+账号密码：test/test
+
+测试环境运维地址：
+http://192.168.1.205:8087
+线上环境运维：
+http://192.168.1.204:8087
+
+测试环境服务错误日志查询（网页版）：
+http://192.168.1.204:5601/app/kibana#/discover/10951460-e0ec-11e9-9d75-a3c7249593a2
+查看某一模块的日志：
+log.file.path.keyword : "/home/ebag/app/logs/user_info.2019-09-29.log"    and host.name.keyword : "superscholar-test"
+
+ssh登录测试服务器看日志（SecureCRTP版）：
+IP:192.168.1.205
+端口：22
+账号：ebag
+密码：ebag
+日志目录：/home/ebag/app/logs
+查看日志的命令：
+tail -fn 200 util_info.2019-09-29.log
+
 小程序码的密钥:
 AppId:  wx8361ba5c8fd9a420
 AppSecret:   104d7e1a30e570f3da6ab3f18f538147
@@ -74,13 +97,6 @@ mybatis:
 <resultMap>
 <collection property="" fetchType="eager"/>
 </resultMap>
-
-8.判断是否为奇数:
-if( (num & 1) !=0 ) , true代表是奇数,false代表为偶数
-解析:
-把num和 1,转化成二进制,两个数只要有一个为1则为1，否则就为0
-  110  和 100 ,最后结果是 101 ,所以 110 & 100=101 (二进制)
-  1 的二进制是1本身,任意正整数num 变成二进制后,和 1比较, 1 & 1 = 1,说明num是奇数,0 & 1=0 ,说明num是偶数
 
 9.前端后台传递数据类型不一致:
 异常:  Can not deserialize instance of java.lang.String out of START_OBJECT token
@@ -434,6 +450,11 @@ git revert HEAD
 
 #强行推送
 git push origin source -f
+
+41.将jar包打入本地仓库
+复制命令：
+mvn install:install-file -DgroupId=com.dm -DartifactId=dmJdbcDriver -Dversion=1.7.18 -Dpackaging=jar 
+-Dfile=Dm7JdbcDriver18.jar
 
 
 
