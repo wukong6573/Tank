@@ -214,3 +214,34 @@ SELECT substring_index('www.baidu.com','.', 1);    #www
 SELECT DATE_SUB(CURDATE(), INTERVAL 8 DAY) 
 --CURDATE()指的是当前日期
 --如果是 -8，就是向后推8天
+
+33.生成三位随机整数的sql:
+SELECT CEILING(RAND()*90+100);
+以此类推：
+-- 生成 4 位的随机数
+SELECT CEILING(RAND()*9000+1000);
+-- 生成 5 位的随机数
+SELECT CEILING(RAND()*90000+10000);
+
+34.生成表关联外键的SQL：
+ALTER TABLE t_idcard_complain ADD CONSTRAINT  FOREIGN KEY(uid) REFERENCES t_user_parent(openid)；
+
+35.//输入参数为Map的条件查询
+A.Product selectByMap(Map<String,Object> map)
+<!--通过map进行条件查询-->（无需parameterType）
+<select id="selectByMap" resultType="com.heiketu.testpackage.pojo.Product">
+    select * from Products where prod_price = #{prodPrice} and prod_desc = #{prodDesc}
+</select>
+
+B.<!--如果是List集合(或set集合)就如下入参取值-->
+<select id="selectByMap" resultType="com.heiketu.testpackage.pojo.Product">
+    select * from Products where prod_price = #{list[0]} and prod_desc = #{collection[1]}
+</select>
+
+C.<!--如果是数组就如下入参取值-->
+<select id="selectByMap" resultType="com.heiketu.testpackage.pojo.Product">
+    select * from Products where prod_price = #{array[0]} and prod_desc = #{array[1]}
+</select>
+
+36.查询不到一天过期的会员用户：
+SELECT * FROM t_user_vip WHERE end_time BETWEEN DATE_ADD(NOW(),INTERVAL -1 DAY) AND NOW()

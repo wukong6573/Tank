@@ -12,10 +12,14 @@
 https://192.168.1.201:8081/  
 账号密码：test/test
 
-测试环境运维地址：
+测试环境非财务运维地址：
 http://192.168.1.205:8087
+测试环境财务运维地址：
+http://192.168.1.205:8090
 线上环境运维：
 http://192.168.1.204:8087
+测试环境模拟线上服务的地址：
+https://test.cloudbags.cn:11113
 
 测试环境服务错误日志查询（网页版）：
 http://192.168.1.204:5601/app/kibana#/discover/10951460-e0ec-11e9-9d75-a3c7249593a2
@@ -455,6 +459,44 @@ git push origin source -f
 复制命令：
 mvn install:install-file -DgroupId=com.dm -DartifactId=dmJdbcDriver -Dversion=1.7.18 -Dpackaging=jar 
 -Dfile=Dm7JdbcDriver18.jar
+
+42.java时间日期函数
+// 1当前日期 常用
+        LocalDate now = LocalDate.now();//2019-10-27    
+// 2 指定年份 和 一年的天数进行创建
+        
+LocalDate localDate = LocalDate.ofYearDay(2018, 256);
+       
+ System.out.println(localDate);// 2018-09-13
+
+43.手动控制事务回滚
+1.首先加上注解：@Transactional
+2.手动回滚：TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+
+44.输入流获取文件内容的基本操作：
+try {
+            FileInputStream in=new FileInputStream("C:\\\\Users\\\\unicho\\\\Desktop\\\\记事本.txt");
+            byte[] bytes=new byte[1024];
+            int read = 0;
+            StringBuffer sb=new StringBuffer();
+            while ((read=in.read(bytes)) !=-1){
+                String s = new String(bytes, 0, read);
+                sb.append(s);
+            }
+            System.out.println(sb);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+45.mybatis 返回值相关：
+A.List<object> 类型，SQL查不到内容，mybatis会返回一个非null的空集合，不会报空指针；
+B.Map<String,object> 类型，SQL查不到数据，mybatis会返回一个null；
+
+46.java时间格式转化：
+String end_time = "2020-01-22 17:02:46";
+SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+Date parse = format.parse(end_time); //把字符串时间转化成Date
+String date=format.format(parse);  //把Date转化成String
+
 
 
 
